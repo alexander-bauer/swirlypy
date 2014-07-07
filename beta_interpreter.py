@@ -12,10 +12,10 @@ class CallbackConsole(pycode.InteractiveConsole):
     def runcode(self, code):
         super().runcode(code)
         if self.callback:
-            self.callback(code)
+            self.callback(self, code)
 
-def echoback(code):
-    print(code)
+def echoback(self, code):
+    print(self.locals)
 
 cc = CallbackConsole(echoback)
 cc.interact()
