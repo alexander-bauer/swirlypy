@@ -17,5 +17,11 @@ class CallbackConsole(pycode.InteractiveConsole):
 def echoback(self, code):
     print(self.locals)
 
-cc = CallbackConsole(echoback)
+def hookvar(self, code):
+    if "hook_count" in self.locals:
+        self.locals["hook_count"] += 1
+    else:
+        self.locals["hook_count"] = 1
+
+cc = CallbackConsole(hookvar)
 cc.interact()
