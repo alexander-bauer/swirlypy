@@ -40,7 +40,7 @@ class text(DemoBase):
 
 class mult_question(DemoBase):
 
-    def selectList(self):
+    def getResponse(self):
         choices = details["AnswerChoices"].split(";")
         n = 0
         choice = ""
