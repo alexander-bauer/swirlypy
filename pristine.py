@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 
-import copy
 import code as pycode
 
 # DictDiffer code borrowed from StackOverflow:
