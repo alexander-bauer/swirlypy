@@ -23,5 +23,8 @@ def hookvar(self, code):
     else:
         self.locals["hook_count"] = 1
 
-cc = CallbackConsole(hookvar)
+def showbuf(self, code):
+    print(self.buffer)
+
+cc = CallbackConsole(showbuf)
 cc.interact()
