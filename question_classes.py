@@ -1,5 +1,9 @@
 #!/usr/bin/python3
 
+# This approach, modeled after R swirl's, strikes me as crufty.
+# All that's really needed are three user input methods: input("yada yada: "),
+# choose from a list (y|n, etc), and capture input from >>>.
+
 import yaml, abc
 
 class DemoBase(object):
