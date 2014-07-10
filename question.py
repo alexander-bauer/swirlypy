@@ -133,3 +133,18 @@ class Question(object):
             questions.append(cls(**document))
 
         return questions
+
+class CategoryQuestion(Question):
+    """CategoryQuestion is another abstract class that includes some of
+    the boilerplate necessary to build safe questions that behave
+    sanely, but have all of the convenience of Questions. Primarily,
+    questions that inherit from CategoryQuestion do not have to override
+    __init__."""
+
+    # Mark this class as an abstract.
+    __metaclass__ = abc.ABCMeta
+
+    def __init__(self, category, output, **kwargs):
+        self.category = category
+        self.output = output
+        self.__dict__.update(kwargs)

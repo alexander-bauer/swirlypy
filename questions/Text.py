@@ -1,9 +1,5 @@
-from swirlypy.question import Question
+from swirlypy.question import CategoryQuestion
 
-class TextQuestion(Question):
-    def __init__(self, category, output, **kwargs):
-        self.category = category
-        self.output = output
-        self.__dict__.update(kwargs)
+class TextQuestion(CategoryQuestion):
     def execute(self):
         self.print()
