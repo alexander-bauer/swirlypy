@@ -5,6 +5,7 @@
 import abc, yaml
 
 class MissingQuestionFieldException(Exception): pass
+class UnknownQuestionCategoryException(Exception): pass
 
 # XXX: Add a __str__ method to represent the question in some way.
 # XXX: Add some 'hint' capacity
@@ -23,6 +24,24 @@ class Question(object):
         self.category = category
         self.output = output
         self.__dict__.update(kwargs)
+
+    @staticmethod
+    def Fit(category, output, **kwargs):
+        """Tries to construct the most specific possible Question or
+        subclass based on the given category. If it is not possible, it
+        raises an UnknownQuestionCategoryException."""
+
+        # Before we do anything hasty, make sure to import the plugin
+        # questions module. Python will take care of things, in case we
+        # try to import this twice, but it has to be here in order to
+        # avoid circular imports.
+        import swirlypy.questions
+
+        qname = (category + "question").lower()
+        if qname in swirlypy.questions.categories:
+            return swirlypy.questions.categories[qname]
+        else:
+            raise UnknownQuestionCategoryException(qname)
 
     # Require that the given list of fields is present in the object's
     # dictionary. If any are not, a MissingQuestionField exception is
