@@ -21,27 +21,45 @@ class Question(object):
     __metaclass__ = abc.ABCMeta
 
     def __init__(self, category, output, **kwargs):
-        self.category = category
-        self.output = output
-        self.__dict__.update(kwargs)
+        """Tries to construct the most specific possible Question
+        subclass based on the given category. It will never construct an
+        actual Question - instead, a CategoryQuestion. If the category
+        is unavailable, it will raise an
+        UnknownQuestionCategoryException."""
 
-    @staticmethod
-    def Fit(category, output, **kwargs):
-        """Tries to construct the most specific possible Question or
-        subclass based on the given category. If it is not possible, it
-        raises an UnknownQuestionCategoryException."""
+        ## Hold on tight. This is going to get really weird.
 
-        # Before we do anything hasty, make sure to import the plugin
-        # questions module. Python will take care of things, in case we
-        # try to import this twice, but it has to be here in order to
-        # avoid circular imports.
+        # Make sure that we have the plugin questions module. We can't
+        # import this earlier due to circular dependencies, but Python
+        # will handle multiple imports for us sanely.
         import swirlypy.questions
 
+        # Now we're going to try to create a dummy CategoryQuestion from
+        # the plugins.
         qname = (category + "question").lower()
         if qname in swirlypy.questions.categories:
-            return swirlypy.questions.categories[qname]
+            # Here's it being created.
+            dummy = swirlypy.questions.categories[qname](category,
+                    output, **kwargs)
         else:
             raise UnknownQuestionCategoryException(qname)
+
+        # Wait, dummy CategoryQuestion? Yeah. We're going to take all of
+        # its fields and assign them to self.
+        self.__dict__ = dummy.__dict__
+
+        # Wait, WHAT? It's okay. We're almost done. All we have to do is
+        # just go ahead and change self's class.
+        self.__class__ = dummy.__class__
+
+        # Yeah. So it turns out that there's a fairly good reason for
+        # all this. Python won't let you return from a constructor.
+        # That's alright, I guess, but it also won't let you completely
+        # reassign self to something different, like an instance of
+        # another class. But you can change the __class__, and
+        # therefore all the bound methods, and as long as we also copy
+        # the fields, no one's any wiser that we used the wrong
+        # constructor.
 
     # Require that the given list of fields is present in the object's
     # dictionary. If any are not, a MissingQuestionField exception is
