@@ -7,3 +7,8 @@
   CorrectAnswer: Fred Jones
   Hint: This character almost never says "Jinkies!"
 
+- Category: newvariable
+  Output: "This is a shell question which requires you to calculate a
+      value. Calculate the square of 256 and store it in a variable."
+  Variables: 65536
+  Hint: The "square" operator is **

@@ -1,0 +1,30 @@
+from swirlypy.question import ShellQuestion
+
+# XXX: Get individual lines of input and evaluate them to get their
+# values, rather than only looking through stored variables.
+class NewVariableQuestion(ShellQuestion):
+    def get_response(self):
+        return self.shell()
+
+    def test_response(self, response):
+        # Parse the variable list.
+        # XXX: Make this more flexible, particularly allowing for named
+        # variables.
+        mustaddvals = str(self.variables).split(";")
+        print(response.added())
+
+        # For each required new value, loop through the list of added
+        # variables, and check that their value matches the required
+        # one.
+        for newval in mustaddvals:
+            # Loop through each newly added variable, and check whether
+            # they match the required newval. If none match, return
+            # False.
+            # XXX: The string comparison here is a hack.
+            if not any([str(response.new[name]) == newval for name in
+                response.added()]):
+                return False
+
+        # If we exit the loop without failing, then we must've found all
+        # of our requirements.
+        return True
