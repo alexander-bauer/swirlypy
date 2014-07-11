@@ -1,15 +1,6 @@
 from swirlypy.question import CategoryQuestion
 
 class MultipleChoiceQuestion(CategoryQuestion):
-    def execute(self):
-        self.print()
-        correct = False
-        while(not correct):
-            response = self.get_response()
-            correct = self.test_response(response)
-            if(not correct):
-                print(self.hint)
-
     def get_response(self):
         options = self.choices.split(";")
         # todo: randomize order of choices
