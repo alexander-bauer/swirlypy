@@ -11,7 +11,7 @@ class MultipleChoiceQuestion(CategoryQuestion):
         while True:
             # Begin by printing the menu with numerical identifiers.
             for i, option in enumerate(options):
-                print(i+1, ": ", option)
+                print("%d: %s" % (i+1, option))
 
             # Get the user's choice and try to return the relevant
             # answer, catching failures and restarting as appropriate.
@@ -23,7 +23,7 @@ class MultipleChoiceQuestion(CategoryQuestion):
                 choice = int(input("Select one of the numbered choices: "))-1
                 return options[choice]
             except (ValueError, IndexError):
-                print("Please pick an integer between 1 and ",
+                print("Please pick an integer between 1 and %d" %
                         len(options))
                 continue
 
