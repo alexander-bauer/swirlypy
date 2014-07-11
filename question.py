@@ -107,9 +107,15 @@ class Question(object):
             # Get the user's response.
             resp = self.get_response()
 
-            # Test it. If correct (True), then break from this loop.
-            if test_response(resp):
+            # Test it. If correct (True), then break from this loop. If
+            # not, print the hint, if it's present.
+            if self.test_response(resp):
                 break
+            else:
+                try:
+                    print(self.hint)
+                except AttributeError:
+                    pass
 
     @classmethod
     def load_yaml(cls, file):
