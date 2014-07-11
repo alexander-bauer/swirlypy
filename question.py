@@ -3,6 +3,8 @@
 # This is another test of question classes.
 
 import abc, yaml
+from code import InteractiveConsole
+from swirlypy.dictdiffer import DictDiffer
 
 class MissingQuestionFieldException(Exception): pass
 class UnknownQuestionCategoryException(Exception): pass
@@ -154,3 +156,40 @@ class CategoryQuestion(Question):
         self.category = category
         self.output = output
         self.__dict__.update(kwargs)
+
+# XXX: Add a simpler way to drop out of the shell than asking the user
+# to exit.
+class ShellQuestion(CategoryQuestion):
+    """ShellQuestion is a question template that handles most of the
+    boilerplate necessary for asking questions that drop to a shell
+    prompt."""
+
+    bannerinfo = "Press CTRL-D to submit."
+
+    # Mark this class as an abstract.
+    __metaclass__ = abc.ABCMeta
+
+    def shell(self, locals={}, newlocals={}):
+        """Open a prompt with the given local variables. This could, for
+        example, open a shell with a pristine copy of the question
+        environment, or one with past input from the user, or load more
+        data. Returns a DictDiffer which represents items the user
+        changed."""
+
+        # First, copy the locals to avoid disturbing the given dict, and
+        # then add the given newlocals.
+        ourlocals = locals.copy()
+        ourlocals.update(newlocals)
+
+        # Start a fresh console object. If we want to maintain state
+        # between multiple shell() calls, we'll have to store the
+        # locals.
+        console = InteractiveConsole(locals=ourlocals.copy())
+
+        # Interact with the console until exiting. The bannerinfo will
+        # be printed prior to the prompt.
+        console.interact(banner=self.bannerinfo)
+
+        # Retrieve the user's environment, and construct a DictDiffer
+        # with it.
+        return DictDiffer(console.locals, ourlocals)
