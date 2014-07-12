@@ -1,0 +1,8 @@
+- Category: text
+  Output: "This is an example course for testing Swirlypy."
+
+- Category: multiplechoice
+  Output: "What version control system is Swirlypy officially in?"
+  Choices: git;svn;cvs;mercurial
+  CorrectAnswer: git
+  Hint: "The same as the Linux kernel"
