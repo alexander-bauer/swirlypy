@@ -184,7 +184,7 @@ class ShellQuestion(CategoryQuestion):
         # Start a fresh console object. If we want to maintain state
         # between multiple shell() calls, we'll have to store the
         # locals.
-        console = InteractiveConsole(locals=ourlocals.copy())
+        console = self.new_console(ourlocals)
 
         # Interact with the console until exiting. The bannerinfo will
         # be printed prior to the prompt.
@@ -193,3 +193,9 @@ class ShellQuestion(CategoryQuestion):
         # Retrieve the user's environment, and construct a DictDiffer
         # with it.
         return DictDiffer(console.locals, ourlocals)
+
+    def new_console(self, locals):
+        """Creates and returns a new interactive console that implements
+        the same interfaces as code.InteractiveConsole. Locals are
+        copied before modification."""
+        return InteractiveConsole(locals.copy())
