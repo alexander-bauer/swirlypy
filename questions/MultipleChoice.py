@@ -2,7 +2,7 @@ from swirlypy.question import CategoryQuestion
 import random
 
 class MultipleChoiceQuestion(CategoryQuestion):
-    def get_response(self):
+    def get_response(self, data={}):
         # Parse the options and shuffle them, for variety.
         options = self.choices.split(";")
         random.shuffle(options)
@@ -27,6 +27,6 @@ class MultipleChoiceQuestion(CategoryQuestion):
                         len(options))
                 continue
 
-    def test_response(self, response):
+    def test_response(self, response, data={}):
         """Check the response in the simplest way possible."""
         return response == self.correctanswer

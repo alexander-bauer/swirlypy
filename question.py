@@ -83,16 +83,16 @@ class Question(object):
         print(self.output)
 
     @abc.abstractmethod
-    def get_response(self):
+    def get_response(self, data={}):
         """Get user question response and returns it as an object that
         can be tested via test_response."""
 
     @abc.abstractmethod
-    def test_response(self, response):
+    def test_response(self, response, data={}):
         """Test the user's response as returned by get_response,
         returning True if successful, and False if not."""
 
-    def execute(self):
+    def execute(self, data={}):
         """Execute the question in the default way, by first printing
         itself, then asking for a response and testing it in a loop
         until it is correct."""
@@ -105,11 +105,11 @@ class Question(object):
         # Loop until correct.
         while True:
             # Get the user's response.
-            resp = self.get_response()
+            resp = self.get_response(data=data)
 
             # Test it. If correct (True), then break from this loop. If
             # not, print the hint, if it's present.
-            if self.test_response(resp):
+            if self.test_response(resp, data=data):
                 break
             else:
                 try:
