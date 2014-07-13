@@ -22,6 +22,8 @@ class Question(object):
     # Mark this class as an abstract.
     __metaclass__ = abc.ABCMeta
 
+    _required_ = []
+
     def __init__(self, category, output, **kwargs):
         """Tries to construct the most specific possible Question
         subclass based on the given category. It will never construct an
@@ -53,6 +55,9 @@ class Question(object):
         # Wait, WHAT? It's okay. We're almost done. All we have to do is
         # just go ahead and change self's class.
         self.__class__ = dummy.__class__
+
+        # And call require
+        self.require(self._required_)
 
         # Yeah. So it turns out that there's a fairly good reason for
         # all this. Python won't let you return from a constructor.

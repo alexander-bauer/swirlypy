@@ -2,6 +2,9 @@ from swirlypy.question import CategoryQuestion
 import random
 
 class MultipleChoiceQuestion(CategoryQuestion):
+
+    _required_ = ['choices', 'correctanswer']
+
     def get_response(self, data={}):
         # Parse the options and shuffle them, for variety.
         options = self.choices.split(";")
