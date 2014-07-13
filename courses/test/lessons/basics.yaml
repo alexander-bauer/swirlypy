@@ -6,3 +6,8 @@
   Choices: git;svn;cvs;mercurial
   CorrectAnswer: git
   Hint: "The same as the Linux kernel"
+
+- Category: getvalue
+  Output: "What is the square of 256?"
+  Values: 65536
+  Hint: "The square operator is ** in Python"
