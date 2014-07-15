@@ -106,7 +106,13 @@ class Course:
         """Loads a whole Course from the given course directory."""
         # Open the relevant file, and pass the rest to load_yaml.
         with open(os.path.join(coursedir, "course.yaml"), "r") as f:
-            return cls.load_yaml(f, coursedir)
+            course = cls.load_yaml(f, coursedir)
+
+            # Fill in some metadata here.
+            course.packaged = False
+
+            # Finally, return it.
+            return course
 
     @classmethod
     def load_yaml(cls, file, coursedir):
