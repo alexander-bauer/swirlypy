@@ -23,8 +23,11 @@ class Course:
     def print(self):
         """Prints a textual representation of the course, including
         name, author, and description, if available."""
-        print("%s by %s: %s" % (self.course, self.author,
-            self.description))
+        if len(self.description) > 0:
+            print("%s by %s: %s" % (self.course, self.author,
+                self.description))
+        else:
+            print("%s by %s" % (self.course, self.author))
 
     def menu(self):
         """Prints a menu containing all of the lessons in the course,
