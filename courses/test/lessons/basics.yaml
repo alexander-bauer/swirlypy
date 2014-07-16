@@ -11,3 +11,8 @@
   Output: "What is the square of 256?"
   Values: 65536
   Hint: "The square operator is ** in Python"
+
+- Category: command
+  Output: "Try running dir() on the integer 1."
+  Answer: dir(1)
+  Hint: "Make sure that you use function(parameter) syntax."
