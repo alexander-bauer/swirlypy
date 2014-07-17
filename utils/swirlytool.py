@@ -5,6 +5,8 @@
 # courses.
 
 import sys, argparse
+import os
+import tarfile
 
 try:
     # XXX: We should be able to just import swirlypy here. We need to
@@ -48,6 +50,19 @@ def info(args):
     # Whether the course is packaged in a pretty format or not.
     print("Course is", "" if course.packaged else "not", "packaged")
 
+# XXX: This should also verify that the course can be run successfully.
+def create(args):
+    """Create a compressed course file."""
+
+    # Find the base name of the course.
+    basecoursename = os.path.basename(args.course_path).split(".")[0]
+
+    # Change to the appropriate directory, so that our tar paths don't
+    # get screwed up.
+    os.chdir(os.path.dirname(args.course_path))
+    tar = tarfile.open(basecoursename + ".tar.gz", "w|gz")
+    tar.add(basecoursename)
+    
 def main(args):
     # If the subcommand is known and registered, pass it the arguments
     # and let it run.
@@ -70,6 +85,10 @@ def parse(args):
     info_command.add_argument("course_path", help="directory of or path \
         to directory containing course.yaml file")
     info_command.set_defaults(func=info)
+    create_command = subparsers.add_parser("create", help=create.__doc__)
+    create_command.add_argument("course_path", help="directory of or \
+        path to directory containing course.yaml file")
+    create_command.set_defaults(func=create)
     return parser.parse_args(args)
 
 if __name__ == "__main__":
