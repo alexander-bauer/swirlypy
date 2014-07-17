@@ -12,8 +12,9 @@ try:
     # XXX: We should be able to just import swirlypy here. We need to
     # set __all__ in the __init__.py of the main module.
     import swirlypy.course
-except ImportError:
-    print("Can't import swirlypy. Is it in your PYTHONPATH?")
+except ImportError as e:
+    print("Can't import a needed module.", e)
+    print("Is it installed or in your PYTHONPATH?")
     sys.exit(1)
 
 def load_course(path):
