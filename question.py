@@ -75,7 +75,7 @@ class Question(object):
         elif type(fields) != list: fields = [fields]
 
         for field in fields:
-            if field not in self.__dict__:
+            if not hasattr(self, field):
                 raise MissingFieldException(field)
 
         return True
