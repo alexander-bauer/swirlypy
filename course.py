@@ -1,7 +1,7 @@
 import yaml
 import swirlypy.slug
 import swirlypy.lesson
-import os, shutil
+import os
 import tarfile
 import tempfile
 
@@ -22,6 +22,18 @@ class Course:
         self.coursedir = coursedir
         self.__dict__.update(kwargs)
 
+        # If the course is packaged, unpack it to a temporary directory,
+        # which will automatically clean itself up.
+        self.packaged = os.path.isfile(self.course)
+        if self.packaged:
+            self._tempdir_ = tempfile.TemporaryDirectory()
+            tarfile.open(self.coursedir).extractall(
+                    path=self._tempdir_.name)
+
+            self.rawdir = os.path.join(self._tempdir_.name, self.pkgname)
+        else:
+            self.rawdir = self.coursedir
+
     def print(self):
         """Prints a textual representation of the course, including
         name, author, and description, if available."""
@@ -37,45 +49,43 @@ class Course:
         for index, lesson in enumerate(self.lessonnames):
             print("%d: %s" % (index + 1, lesson))
 
+    def validate(self):
+        """Perform self-tests to ensure that the course can be executed
+        safely."""
+
+        # XXX: validate metadata
+
+        # For each lesson, try to run tests. If not present, print a
+        # warning.
+        for lesson_number in range(1, len(self.lessonnames) + 1):
+            # Load the lesson.
+            l = self.load_lesson(lesson_number)
+
+            try:
+                l.validate()
+            except AttributeError:
+                print("WARNING: %s has no self-tests" %
+                        self.lessonnames[lesson_number - 1])
+
     def execute(self):
         """Repeatedly prompts the user for lessons to run until
         explictly exited."""
 
-        # If the course is packaged, unpack it to a temporary directory.
-        if self.packaged:
-            tempdir = tempfile.mkdtemp()
-            tarfile.open(self.coursedir).extractall(path=str(tempdir))
-
-            self.rawdir = os.path.join(tempdir, self.pkgname)
-        else:
-            self.rawdir = self.coursedir
-
-        try:
-            # Loop until user EOF.
-            while True:
-                # Present the menu.
-                self.menu()
-                try:
-                    identifier = input("Selection: ").strip()
-                    self.execute_lesson(identifier)
-                except NoSuchLessonException:
-                    print("No lesson: %s" % identifier)
-                except EOFError:
-                    # If the user hits CTRL-D, exit.
-                    # XXX: Tell the user this.
-                    print()
-                    print("Bye!")
-                    if self.packaged: shutil.rmtree(self.rawdir, \
-                            ignore_errors = True)
-                    break
-
-        except Exception:
-            # If we encounter any error, clean up the temporary
-            # directory, if applicable, then raise it.
-            if self.packaged: shutil.rmtree(self.rawdir, \
-                    ignore_errors = True)
-
-            raise
+        # Loop until user EOF.
+        while True:
+            # Present the menu.
+            self.menu()
+            try:
+                identifier = input("Selection: ").strip()
+                self.execute_lesson(identifier)
+            except NoSuchLessonException:
+                print("No lesson: %s" % identifier)
+            except EOFError:
+                # If the user hits CTRL-D, exit.
+                # XXX: Tell the user this.
+                print()
+                print("Bye!")
+                break
 
     def execute_lesson(self, identifier):
         """Executes a lesson based on a given identifier. This can be

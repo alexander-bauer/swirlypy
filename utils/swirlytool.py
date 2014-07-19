@@ -63,6 +63,16 @@ def create(args):
     os.chdir(os.path.dirname(args.course_path))
     tar = tarfile.open(basecoursename + ".tar.gz", "w|gz")
     tar.add(basecoursename)
+
+def test(args):
+    """Test a swirlypy course, packaged or raw."""
+    course = load_course(args.course_path)
+    if not course:
+        return 1
+
+    # If successful, print its description and run validate.
+    course.print()
+    course.validate()
     
 def main(args):
     # If the subcommand is known and registered, pass it the arguments
@@ -90,6 +100,10 @@ def parse(args):
     create_command.add_argument("course_path", help="directory of or \
         path to directory containing course.yaml file")
     create_command.set_defaults(func=create)
+    test_command = subparsers.add_parser("test", help=test.__doc__)
+    test_command.add_argument("course_path", help="directory of or \
+        path to directory containing course.yaml file")
+    test_command.set_defaults(func=test)
     return parser.parse_args(args)
 
 if __name__ == "__main__":
