@@ -48,12 +48,35 @@ class Course:
         for index, lesson in enumerate(self.lessonnames):
             print("%d: %s" % (index + 1, lesson))
 
+    # XXX: Include a flag to have return status indicate whether
+    # warnings were present.
     def validate(self):
         """Perform self-tests to ensure that the course can be executed
         safely."""
 
-        # XXX: validate metadata
+        # Keep track of whether there have been any fatal errors.
+        no_errors = True
 
+        # Define some convenience functions.
+        def print_err(string):
+            no_errors = False
+            print("ERROR: %s" % string)
+
+        def print_warn(string):
+            print("WARNING: %s" % string)
+
+
+        # Error cases
+        for field in [ "course", "lessonnames", "author" ]:
+            if not hasattr(self, field):
+                print_err("course.yaml has no '%s' attribute" %
+                        field)
+
+        # Warning cases
+        for field in [ "description", "organization", "version", \
+                "date" ]:
+            if not hasattr(self, "description"):
+                print_warn("course.yaml has no '%s' attribute")
 
         # For each lesson, try to run tests. If not present, print a
         # warning.
@@ -64,8 +87,11 @@ class Course:
             try:
                 l.validate()
             except AttributeError:
-                print("WARNING: %s has no self-tests" %
+                print_warn("%s has no self-tests" %
                         self.lessonnames[lesson_number - 1])
+
+        # Return whether there were any fatal errors.
+        return no_errors
 
     def execute(self):
         """Repeatedly prompts the user for lessons to run until
