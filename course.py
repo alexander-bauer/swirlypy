@@ -41,26 +41,62 @@ class Course:
         """Repeatedly prompts the user for lessons to run until
         explictly exited."""
 
-        # Loop until user EOF.
-        while True:
-            # Present the menu.
-            self.menu()
-            try:
-                identifier = input("Selection: ").strip()
-                self.execute_lesson(identifier)
-            except NoSuchLessonException:
-                print("No lesson: %s" % identifier)
-            except EOFError:
-                # If the user hits CTRL-D, exit.
-                # XXX: Tell the user this.
-                print()
-                print("Bye!")
-                break
+        # If the course is packaged, unpack it to a temporary directory.
+        if self.packaged:
+            tempdir = tempfile.mkdtemp()
+            tarfile.open(self.coursedir).extractall(path=str(tempdir))
+
+            self.rawdir = os.path.join(tempdir, self.pkgname)
+        else:
+            self.rawdir = self.coursedir
+
+        try:
+            # Loop until user EOF.
+            while True:
+                # Present the menu.
+                self.menu()
+                try:
+                    identifier = input("Selection: ").strip()
+                    self.execute_lesson(identifier)
+                except NoSuchLessonException:
+                    print("No lesson: %s" % identifier)
+                except EOFError:
+                    # If the user hits CTRL-D, exit.
+                    # XXX: Tell the user this.
+                    print()
+                    print("Bye!")
+                    if self.packaged: shutil.rmtree(self.rawdir, \
+                            ignore_errors = True)
+                    break
+
+        except Exception:
+            # If we encounter any error, clean up the temporary
+            # directory, if applicable, then raise it.
+            if self.packaged: shutil.rmtree(self.rawdir, \
+                    ignore_errors = True)
+
+            raise
 
     def execute_lesson(self, identifier):
         """Executes a lesson based on a given identifier. This can be
         either an index (one-based) or a string matching a lesson name.
         If none can be found, it throws a NoSuchLessonException."""
+
+        # Load the lesson, if possible.
+        lesson = self.load_lesson(identifier)
+
+        # Execute it.
+        data = lesson.execute()
+
+        # Print a seperator to show it's complete.
+        print()
+        print("Lesson %s complete!" % lessonname)
+
+    def load_lesson(self, identifier):
+        """Loads a lesson from YAML based on a given identifier. This
+        can be either an index (one-based) or a string matching a lesson
+        name. If none can be found, it throws a
+        NoSuchLessonException."""
 
         # Create an empty lesson name to refer to.
         lessonname = ""
@@ -88,44 +124,17 @@ class Course:
                 raise NoSuchLessonException("Invalid lesson: %s" %
                         identifier)
 
-        # If the course is packaged, we need to temporarily extract it.
-        # For simplicity, if the course is raw, still set curcoursedir
-        # to the coursedir.
-        if self.packaged:
-            tempdir = tempfile.mkdtemp()
-            tarfile.open(self.coursedir).extractall(path=str(tempdir))
+        # We can construct the path that the lesson should be available
+        # at by combining the course directory, "lessons", and the
+        # slugified lesson name.
+        lessonpath = os.path.join(self.rawdir, "lessons",
+                swirlypy.slug.slugify(lessonname) + ".yaml")
 
-            curcoursedir = os.path.join(tempdir, self.pkgname)
+        # Open the lesson and parse it from YAML.
+        with open(lessonpath, "r") as f:
+            lesson = swirlypy.lesson.Lesson.load_yaml(f)
 
-        else:
-            curcoursedir = self.coursedir
-
-        try:
-            # We can construct the path that the lesson should be
-            # available at by combining the tempdir, "lessons", and the
-            # slugified lesson name.
-            lessonpath = os.path.join(curcoursedir, "lessons",
-                    swirlypy.slug.slugify(lessonname) + ".yaml")
-
-            # Open the lesson and parse it from YAML.
-            with open(lessonpath, "r") as f:
-                lesson = swirlypy.lesson.Lesson.load_yaml(f)
-
-
-            # Execute it.
-            data = lesson.execute()
-
-            # Print a seperator to show it's complete.
-            print()
-            print("Lesson %s complete!" % lessonname)
-
-        except Exception:
-            # If we encounter any error, clean up the temporary
-            # directory, if applicable, then raise it.
-            if self.packaged: shutil.rmtree(tempdir, \
-                    ignore_errors = True)
-
-            raise
+        return lesson
 
     # XXX: Decide on and document the hardcoded course.yaml file here.
     @classmethod
