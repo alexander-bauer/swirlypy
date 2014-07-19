@@ -5,9 +5,7 @@
 import abc, yaml
 from code import InteractiveConsole
 from swirlypy.dictdiffer import DictDiffer
-
-class MissingQuestionFieldException(Exception): pass
-class UnknownQuestionCategoryException(Exception): pass
+from swirlypy.errors import *
 
 # XXX: Add a __str__ method to represent the question in some way.
 # XXX: Add some 'hint' capacity
@@ -69,8 +67,7 @@ class Question(object):
         # constructor.
 
     # Require that the given list of fields is present in the object's
-    # dictionary. If any are not, a MissingQuestionField exception is
-    # raised.
+    # dictionary. If any are not, a MissingFieldException is raised.
     def require(self, fields):
         # If only one field is given, treat it sanely by wrapping it in
         # a list.
@@ -79,7 +76,7 @@ class Question(object):
 
         for field in fields:
             if field not in self.__dict__:
-                raise MissingQuestionFieldException(field)
+                raise MissingFieldException(field)
 
         return True
 

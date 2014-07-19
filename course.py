@@ -5,8 +5,7 @@ import os
 import tarfile
 import tempfile
 
-class NoCoursePresentException(Exception): pass
-class NoSuchLessonException(Exception): pass
+from swirlypy.errors import *
 
 class Course:
     """Course is a concrete representation of a collection of lessons
@@ -54,6 +53,7 @@ class Course:
         safely."""
 
         # XXX: validate metadata
+
 
         # For each lesson, try to run tests. If not present, print a
         # warning.
