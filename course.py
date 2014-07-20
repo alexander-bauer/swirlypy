@@ -128,7 +128,7 @@ class Course:
 
         # Print a seperator to show it's complete.
         print()
-        print("Lesson %s complete!" % lessonname)
+        print("Lesson complete!")
 
     def load_lesson(self, identifier):
         """Loads a lesson from YAML based on a given identifier. This
