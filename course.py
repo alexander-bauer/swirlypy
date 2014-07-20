@@ -22,9 +22,10 @@ class Course:
         self.__dict__.update(kwargs)
 
         # If the course is packaged, unpack it to a temporary directory,
-        # which will automatically clean itself up.
-        self.packaged = os.path.isfile(self.course)
-        if self.packaged:
+        # which will automatically clean itself up. If the course exists
+        # only in memory, for some reason, the packaged attribute will
+        # not be set.
+        if hasattr(self, "packaged") and self.packaged:
             self._tempdir_ = tempfile.TemporaryDirectory()
             tarfile.open(self.coursedir).extractall(
                     path=self._tempdir_.name)
