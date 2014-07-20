@@ -2,6 +2,7 @@ from swirlypy.question import ShellQuestion
 import code, ast, sys
 
 class CommandQuestion(ShellQuestion):
+    _required_ = [ "answer" ]
     def get_response(self, data={}):
         """Interacts with the user until broken from, or reaches EOF.
         Each new command that the user enters is captured and yielded to

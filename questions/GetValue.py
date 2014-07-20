@@ -2,6 +2,7 @@ from swirlypy.question import ShellQuestion
 import code, ast, sys
 
 class GetValueQuestion(ShellQuestion):
+    _required_ = [ "values" ]
     def get_response(self, data={}):
         """Interacts with the user until broken from, or reaches EOF.
         Each new expression, such as 'x**2', but unlike 'y = x**2', is

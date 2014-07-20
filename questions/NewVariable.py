@@ -3,6 +3,7 @@ from swirlypy.question import ShellQuestion
 # XXX: Get individual lines of input and evaluate them to get their
 # values, rather than only looking through stored variables.
 class NewVariableQuestion(ShellQuestion):
+    _required_ = ["variables"]
     def get_response(self, data={}):
         return self.shell()
 
