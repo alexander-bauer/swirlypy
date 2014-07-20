@@ -12,14 +12,13 @@ class Course:
     in one coherent unit."""
 
     def __init__(self, course, lessons, author, version, coursedir,
-            published, **kwargs):
+            **kwargs):
         self.course = course
         self.lessonnames = lessons.split(";")
         self.author = author
         self.description = ""
         self.version = version
         self.coursedir = coursedir
-        self.published = published # should be a datetime already
         self.__dict__.update(kwargs)
 
         # If the course is packaged, unpack it to a temporary directory,
