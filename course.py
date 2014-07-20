@@ -76,9 +76,10 @@ class Course:
 
         # Warning cases
         for field in [ "description", "organization", "version", \
-                "date" ]:
-            if not hasattr(self, "description"):
-                print_warn("course.yaml has no '%s' attribute")
+                "published" ]:
+            if not hasattr(self, field):
+                print_warn("course.yaml has no '%s' attribute" %
+                        field)
 
         # For each lesson, try to run tests. If not present, print a
         # warning.
