@@ -48,6 +48,9 @@ def info(args):
     # it: including...
     course.print()
 
+    if hasattr(course, "published"):
+        print(course.published.strftime("Published on %d %B, %Y"))
+
     # Whether the course is packaged in a pretty format or not.
     print("Course is", "" if course.packaged else "not", "packaged")
 
