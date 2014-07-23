@@ -83,8 +83,16 @@ class Course:
         # For each lesson, try to run tests. If not present, print a
         # warning.
         for lesson_number in range(1, len(self.lessonnames) + 1):
-            # Load the lesson.
-            l = self.load_lesson(lesson_number)
+            # Load the lesson, and carefully report any errors loading
+            # it.
+            try:
+                l = self.load_lesson(lesson_number)
+            except FileNotFoundError as e:
+                print_err("Could not load lesson from file: '%s'" % e)
+
+            # If the load failed in any way, abort here.
+            if l != None:
+                continue
 
             try:
                 l.validate()
