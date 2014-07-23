@@ -6,6 +6,7 @@ import tarfile
 import tempfile
 
 from swirlypy.errors import *
+from swirlypy.colors import color, colorize
 
 class Course:
     """Course is a concrete representation of a collection of lessons
@@ -61,10 +62,10 @@ class Course:
         # Define some convenience functions.
         def print_err(string):
             no_errors = False
-            print("ERROR: %s" % string)
+            print(colorize("ERROR: %s", "bold;red") % string)
 
         def print_warn(string):
-            print("WARNING: %s" % string)
+            print(colorize("WARNING: %s", "yellow") % string)
 
 
         # Error cases
