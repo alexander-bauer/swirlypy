@@ -8,7 +8,7 @@ class GetValueQuestion(ShellQuestion):
         Each new expression, such as 'x**2', but unlike 'y = x**2', is
         captured and yielded to the caller."""
         console = self.new_console({})
-        for value in console.interact(self.output):
+        for value in console.interact(""):
             yield value
 
     def test_response(self, response, data={}):
@@ -18,7 +18,7 @@ class GetValueQuestion(ShellQuestion):
             return response == self.values
 
     def execute(self, data={}):
-        # Don't print the output. That gets handled by the console.
+        self.print()
 
         # Loop until we get the correct answer.
         while True:

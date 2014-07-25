@@ -14,7 +14,7 @@ class MultipleChoiceQuestion(CategoryQuestion):
         while True:
             # Begin by printing the menu with numerical identifiers.
             for i, option in enumerate(options):
-                print("%d: %s" % (i+1, option))
+                self.print_option("%d: %s" % (i+1, option))
 
             # Get the user's choice and try to return the relevant
             # answer, catching failures and restarting as appropriate.
@@ -23,11 +23,14 @@ class MultipleChoiceQuestion(CategoryQuestion):
             # scope of the function. This allows for grading.
             # XXX: Try to match strings to choices, too.
             try:
-                choice = int(input("Select one of the numbered choices: "))-1
+                self.print_inst("Select one of the numbered choices: ",
+                        end="")
+                choice = int(input())-1
                 return options[choice]
             except (ValueError, IndexError):
-                print("Please pick an integer between 1 and %d" %
-                        len(options))
+                self.print_help(
+                    "Please pick an integer between 1 and %d" %
+                    len(options))
                 continue
 
     def test_response(self, response, data={}):

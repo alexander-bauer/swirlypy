@@ -8,7 +8,7 @@ class CommandQuestion(ShellQuestion):
         Each new command that the user enters is captured and yielded to
         the caller."""
         console = self.new_console({})
-        for value in console.interact(self.output):
+        for value in console.interact(""):
             yield value
 
     def test_response(self, response, data={}):
@@ -23,7 +23,7 @@ class CommandQuestion(ShellQuestion):
         return ast.dump(answer_tree) == ast.dump(response)
 
     def execute(self, data={}):
-        # Don't print the output. That gets handled by the console.
+        self.print()
 
         # Loop until we get the correct answer.
         while True:
@@ -34,7 +34,7 @@ class CommandQuestion(ShellQuestion):
                     return
                 else:
                     try:
-                        print(self.hint)
+                        self.print_help(self.hint)
                     except AttributeError:
                         pass
 

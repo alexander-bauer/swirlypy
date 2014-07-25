@@ -5,6 +5,7 @@
 import abc, yaml
 from code import InteractiveConsole
 from swirlypy.dictdiffer import DictDiffer
+from swirlypy.colors import colorize
 from swirlypy.errors import *
 
 # XXX: Add a __str__ method to represent the question in some way.
@@ -84,7 +85,19 @@ class Question(object):
     # XXX: Could be much more advanced; automatically paginating, for
     # example.
     def print(self):
-        print(self.output)
+        self.print_question(self.output)
+
+    def print_inst(self, string, **kwargs):
+        print(string, **kwargs)
+
+    def print_question(self, string, **kwargs):
+        print(colorize(string, "bold;blue"), **kwargs)
+
+    def print_option(self, string, **kwargs):
+        print(colorize(string, "magenta"), **kwargs)
+
+    def print_help(self, string, **kwargs):
+        print(colorize(string, "blue"), **kwargs)
 
     @abc.abstractmethod
     def get_response(self, data={}):
@@ -118,7 +131,7 @@ class Question(object):
                 break
             elif testresult == False:
                 try:
-                    print(self.hint)
+                    self.print_help(self.hint)
                 except AttributeError:
                     pass
             else:
