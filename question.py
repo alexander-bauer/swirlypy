@@ -114,9 +114,9 @@ class Question(object):
             # Test it. If correct (True), then break from this loop. If
             # not, print the hint, if it's present.
             testresult = self.test_response(resp, data=data)
-            if test == True:
+            if testresult == True:
                 break
-            elif test == False:
+            elif testresult == False:
                 try:
                     print(self.hint)
                 except AttributeError:
