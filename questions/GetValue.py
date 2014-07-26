@@ -12,6 +12,12 @@ class GetValueQuestion(ShellQuestion):
             yield value
 
     def test_response(self, response, data={}):
+        # Instead of matching if the response is None, disregard the
+        # "submission."
+        # XXX: Allow for matching values of None.
+        if response == None:
+            return None
+
         if type(self.values) == str:
             return response in self.values.split(";")
         else:
@@ -25,9 +31,10 @@ class GetValueQuestion(ShellQuestion):
             # Get any values that the user generates, and pass them to
             # test_response.
             for value in self.get_response(data=data):
-                if self.test_response(value, data=data):
+                tested = self.test_response(value, data=data)
+                if tested == True:
                     return
-                else:
+                elif tested == False:
                     try:
                         print(self.hint)
                     except AttributeError:
