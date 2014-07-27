@@ -6,6 +6,7 @@ import tarfile
 import tempfile
 
 from swirlypy.errors import *
+import swirlypy.colors as colors
 from swirlypy.colors import color, colorize
 
 class Course:
@@ -48,7 +49,7 @@ class Course:
         """Prints a menu containing all of the lessons in the course,
         along with their index."""
         for index, lesson in enumerate(self.lessonnames):
-            print("%d: %s" % (index + 1, lesson))
+            colors.print_option("%d: %s" % (index + 1, lesson))
 
     # XXX: Include a flag to have return status indicate whether
     # warnings were present.
@@ -113,7 +114,8 @@ class Course:
             # Present the menu.
             self.menu()
             try:
-                identifier = input("Selection: ").strip()
+                colors.print_inst("Selection: ", end="")
+                identifier = input().strip()
                 self.execute_lesson(identifier)
             except NoSuchLessonException:
                 print("No lesson: %s" % identifier)
