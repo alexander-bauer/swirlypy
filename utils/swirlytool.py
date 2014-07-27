@@ -8,12 +8,14 @@ import sys, argparse
 import os
 import tarfile
 
+import swirlypy.colors as colors
+
 try:
     # XXX: We should be able to just import swirlypy here. We need to
     # set __all__ in the __init__.py of the main module.
     import swirlypy.course
 except ImportError as e:
-    print("Can't import a needed module.", e)
+    colors.print_err("Can't import a needed module: %s" % e)
     print("Is it installed or in your PYTHONPATH?")
     sys.exit(1)
 
@@ -24,8 +26,8 @@ def load_course(path):
     try:
         return swirlypy.course.Course.load(path)
     except FileNotFoundError as e:
-        print(e)
-        print("Couldn't load course; does it have course.yaml?")
+        colors.print_err("Couldn't load course: %s" % e)
+        print("Does it have course.yaml?")
         return None
 
 def run(args):
