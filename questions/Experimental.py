@@ -73,7 +73,6 @@ class ExperimentalConsole(code.InteractiveConsole):
         # XXX: This is a hack to override parent precedence. This needs
         # to be fixed in a better way.
         self.compile = self.compile_ast
-        self.cpylocals = self.locals.copy()
 
         # Borrow a block of code from code.InteractiveConsole
         try:
@@ -95,6 +94,8 @@ class ExperimentalConsole(code.InteractiveConsole):
         while 1:
             # Reset the value of latest_parsed.
             self.latest_parsed = None
+            # WRB: make a copy of locals
+            cpylocals = self.locals.copy()
 
             try:
                 if more:
@@ -109,12 +110,18 @@ class ExperimentalConsole(code.InteractiveConsole):
                 else:
                     more = self.push(line)
                     print("more = ", more, type(more))
-                    print("added = ", DictDiffer(self.locals, self.cpylocals).added())
+                    # WRB: A DictDiffer object has 4 sets as fields added, changed, removed, unchanged
+                    # I'm primarily interested in added or changed at the moment.
+                    # The sets, however, contain only keys, not values.
+                    diffs = DictDiffer(self.locals, cpylocals)
+                    
+                    # See if the last computed value is available
+                    # It doesn't seem to.
                     
                     # Check to see if a new value has been parsed yet.
-                    # If so, yield it.
+                    # If so, yield it. WRB: return a dict of various things
                     if self.latest_parsed != None:
-                        yield {"ast":self.latest_parsed}
+                        yield {"ast":self.latest_parsed, "diffs":diffs}
 
             except KeyboardInterrupt:
                 self.write("\nKeyboardInterrupt\n")
