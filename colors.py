@@ -47,3 +47,15 @@ def interpret_ansispec(spec):
             raise UnknownANSICodeException(component)
 
     return ansi
+
+def print_inst(self, string, **kwargs):
+    print(string, **kwargs)
+
+def print_question(self, string, **kwargs):
+    print(colorize(string, "bold;blue"), **kwargs)
+
+def print_option(self, string, **kwargs):
+    print(colorize(string, "magenta"), **kwargs)
+
+def print_help(self, string, **kwargs):
+    print(colorize(string, "blue"), **kwargs)
