@@ -3,9 +3,6 @@
   Hint: "Type print('hi')"
   Answer: print('hi')
 
-# XXX. Check the name as well as the value.
-# For values it would be nice to give an expression which evaluates to
-# the correct value. 
 - Category: experimental
   Output: "Here we create a variable for use in subsequent questions. Set x=10"
   Hint: "Enter x = 10"
@@ -15,11 +12,4 @@
 - Category: experimental
   Output: "What is the value of x?"
   Answer: 10
-  Hint: "Type x or its value."
-
-# XXX. Not sure the category is right, but 
-- Category: experimental
-  Output: "You are supposed to set x=2*x, but set x=3*x by mistake. Have the app restore the correct value of x for the next try."
-  Hint: "Now do it right."
-  Answer: x=20
-
+  Hint: "Type the value of x."

@@ -1,4 +1,5 @@
 from swirlypy.question import ShellQuestion
+from swirlypy.questions.GetValue import CaptureExprs, Recorder
 import code, ast, sys
 from swirlypy.dictdiffer import DictDiffer
 
@@ -10,23 +11,22 @@ class ExperimentalQuestion(ShellQuestion):
         the caller."""
         console = self.new_console({})
         for value in console.interact(""):
-            yield value
-
+             yield value
+            
     def test_response(self, response, data={}):
-        # Parse the provided correct answer in the same way it's parsed
-        # by the CommandReturnerConsole.
-        print("testing ", self.answer, type(self.answer))
-        if isinstance(self.answer, str):
-            answer_tree = ast.parse(self.answer, filename="<answer>", \
-                    mode="single")
-
-            # Now, we have to test their string dumps, because otherwise
-            # it will resort to reference equality.
-            # XXX: Find a more elegant way to do this.
-            return ast.dump(answer_tree) == ast.dump(response["ast"])
-        else:
-            return False
-
+        """Just prints responses and returns True."""
+        if "ast" in response:
+            print("\nast: ", ast.dump(response["ast"]))
+        if "added" in response:
+            print("\nadded: ", response["added"])
+        if "changed" in response:
+            print("changed: ", response["changed"])
+        if "removed" in response:
+            print("removed: ", response["removed"])
+        if "values" in response:
+            print("\nvalues: ", response["values"])
+        return True
+        
     def execute(self, data={}):
         self.print()
 
@@ -44,12 +44,21 @@ class ExperimentalQuestion(ShellQuestion):
                         pass
 
     def new_console(self, locals):
-        """Creates a new CommandReturnerConsole."""
-        return ExperimentalConsole({})
+        """Creates a new experimental console and recorder, and includes the recorder
+        as __swirlypy_recorder__ in the new console."""
+        # Create the new recorder.
+        # XXX: This is also a bit hacky. The recorder should be handled
+        # entirely by the VPC.
+        self._recorder = Recorder()
+        newlocals = locals.copy()
+        newlocals["__swirlypy_recorder__"] = self._recorder
+        return ExperimentalConsole(newlocals)
 
 class ExperimentalConsole(code.InteractiveConsole):
     """Allows the user to interact with a console, and yields every
     command that they type in as an AST."""
+
+    class RecorderCorruptedException(Exception): pass
 
     def compile_ast(self, source, filename = "<input>", symbol = "single"):
         # Here, we try to compile the relevant code. It may throw an
@@ -61,11 +70,13 @@ class ExperimentalConsole(code.InteractiveConsole):
         # If the compilation succeeded, as indicated by its object not being
         # None, and no exception having occurred, parse it with AST and
         # store that.
+        # XXX. Add code to get values
         if compiled != None:
             self.latest_parsed = ast.parse(source, filename, symbol)
-
-        return compiled
-
+            CaptureExprs().visit(self.latest_parsed)
+            
+        return compile(self.latest_parsed, filename, symbol)
+        
     def interact(self, banner=None):
         """Interacts with the user. Each time a complete command is
         entered, it is parsed using AST and yielded."""
@@ -109,19 +120,23 @@ class ExperimentalConsole(code.InteractiveConsole):
                     break
                 else:
                     more = self.push(line)
-                    print("more = ", more, type(more))
-                    # WRB: A DictDiffer object has 4 sets as fields added, changed, removed, unchanged
-                    # I'm primarily interested in added or changed at the moment.
-                    # The sets, however, contain only keys, not values.
+                    # WRB: A DictDiffer object has 4 fields: added, changed, removed, unchanged,
+                    # These are sets containing variable names only. Attaching values:
                     diffs = DictDiffer(self.locals, cpylocals)
-                    
-                    # See if the last computed value is available
-                    # It doesn't seem to.
-                    
+                    ad =dict()
+                    for k in diffs.added()-{'__builtins__'}:
+                        ad[k] = self.locals[k]
+                    ch= dict()
+                    for k in diffs.changed():
+                        ch[k] = self.locals[k]
+                    rv = dict()
+                    for k in diffs.removed():
+                        rv[k] = cpylocals[k]
                     # Check to see if a new value has been parsed yet.
-                    # If so, yield it. WRB: return a dict of various things
+                    # If so, yield various useful things. 
                     if self.latest_parsed != None:
-                        yield {"ast":self.latest_parsed, "diffs":diffs}
+                        yield {"ast":self.latest_parsed,  "added":ad, "changed":ch, \
+                        "removed":rv, "values":self.locals["__swirlypy_recorder__"]}
 
             except KeyboardInterrupt:
                 self.write("\nKeyboardInterrupt\n")
