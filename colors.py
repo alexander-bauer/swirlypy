@@ -48,14 +48,14 @@ def interpret_ansispec(spec):
 
     return ansi
 
-def print_inst(self, string, **kwargs):
+def print_inst(string, **kwargs):
     print(string, **kwargs)
 
-def print_question(self, string, **kwargs):
+def print_question(string, **kwargs):
     print(colorize(string, "bold;blue"), **kwargs)
 
-def print_option(self, string, **kwargs):
+def print_option(string, **kwargs):
     print(colorize(string, "magenta"), **kwargs)
 
-def print_help(self, string, **kwargs):
+def print_help(string, **kwargs):
     print(colorize(string, "blue"), **kwargs)
