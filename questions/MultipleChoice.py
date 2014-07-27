@@ -1,4 +1,5 @@
 from swirlypy.question import CategoryQuestion
+import swirlypy.colors as colors
 import random
 
 class MultipleChoiceQuestion(CategoryQuestion):
@@ -14,7 +15,7 @@ class MultipleChoiceQuestion(CategoryQuestion):
         while True:
             # Begin by printing the menu with numerical identifiers.
             for i, option in enumerate(options):
-                self.print_option("%d: %s" % (i+1, option))
+                colors.print_option("%d: %s" % (i+1, option))
 
             # Get the user's choice and try to return the relevant
             # answer, catching failures and restarting as appropriate.
@@ -23,12 +24,12 @@ class MultipleChoiceQuestion(CategoryQuestion):
             # scope of the function. This allows for grading.
             # XXX: Try to match strings to choices, too.
             try:
-                self.print_inst("Select one of the numbered choices: ",
+                colors.print_inst("Select one of the numbered choices: ",
                         end="")
                 choice = int(input())-1
                 return options[choice]
             except (ValueError, IndexError):
-                self.print_help(
+                colors.print_help(
                     "Please pick an integer between 1 and %d" %
                     len(options))
                 continue

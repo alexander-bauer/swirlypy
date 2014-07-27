@@ -6,6 +6,7 @@ import tarfile
 import tempfile
 
 from swirlypy.errors import *
+import swirlypy.colors as colors
 from swirlypy.colors import color, colorize
 
 class Course:
@@ -48,7 +49,7 @@ class Course:
         """Prints a menu containing all of the lessons in the course,
         along with their index."""
         for index, lesson in enumerate(self.lessonnames):
-            print("%d: %s" % (index + 1, lesson))
+            colors.print_option("%d: %s" % (index + 1, lesson))
 
     # XXX: Include a flag to have return status indicate whether
     # warnings were present.
@@ -62,10 +63,10 @@ class Course:
         # Define some convenience functions.
         def print_err(string):
             no_errors = False
-            print(colorize("ERROR: %s", "bold;red") % string)
+            colors.print_err(string)
 
         def print_warn(string):
-            print(colorize("WARNING: %s", "yellow") % string)
+            colors.print_warn(string)
 
 
         # Error cases
@@ -113,10 +114,11 @@ class Course:
             # Present the menu.
             self.menu()
             try:
-                identifier = input("Selection: ").strip()
+                colors.print_inst("Selection: ", end="")
+                identifier = input().strip()
                 self.execute_lesson(identifier)
             except NoSuchLessonException:
-                print("No lesson: %s" % identifier)
+                colors.print_err("No lesson: %s" % identifier)
             except EOFError:
                 # If the user hits CTRL-D, exit.
                 # XXX: Tell the user this.
@@ -137,7 +139,7 @@ class Course:
 
         # Print a seperator to show it's complete.
         print()
-        print("Lesson complete!")
+        colors.print_help("Lesson complete!")
 
     def load_lesson(self, identifier):
         """Loads a lesson from YAML based on a given identifier. This

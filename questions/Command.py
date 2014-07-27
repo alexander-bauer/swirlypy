@@ -1,4 +1,5 @@
 from swirlypy.question import ShellQuestion
+import swirlypy.colors as colors
 import code, ast, sys
 
 class CommandQuestion(ShellQuestion):
@@ -34,7 +35,7 @@ class CommandQuestion(ShellQuestion):
                     return
                 else:
                     try:
-                        self.print_help(self.hint)
+                        colors.print_help(self.hint)
                     except AttributeError:
                         pass
 
