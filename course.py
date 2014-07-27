@@ -63,10 +63,10 @@ class Course:
         # Define some convenience functions.
         def print_err(string):
             no_errors = False
-            print(colorize("ERROR: %s", "bold;red") % string)
+            colors.print_err(string)
 
         def print_warn(string):
-            print(colorize("WARNING: %s", "yellow") % string)
+            colors.print_warn(string)
 
 
         # Error cases
@@ -118,7 +118,7 @@ class Course:
                 identifier = input().strip()
                 self.execute_lesson(identifier)
             except NoSuchLessonException:
-                print("No lesson: %s" % identifier)
+                colors.print_err("No lesson: %s" % identifier)
             except EOFError:
                 # If the user hits CTRL-D, exit.
                 # XXX: Tell the user this.
@@ -139,7 +139,7 @@ class Course:
 
         # Print a seperator to show it's complete.
         print()
-        print("Lesson complete!")
+        colors.print_help("Lesson complete!")
 
     def load_lesson(self, identifier):
         """Loads a lesson from YAML based on a given identifier. This
