@@ -1,6 +1,7 @@
 from swirlypy.question import ShellQuestion
 from swirlypy.questions.GetValue import CaptureExprs, Recorder
 import code, ast, sys
+from copy import deepcopy
 from swirlypy.dictdiffer import DictDiffer
 
 class ExperimentalQuestion(ShellQuestion):
@@ -9,7 +10,7 @@ class ExperimentalQuestion(ShellQuestion):
         """Interacts with the user until broken from, or reaches EOF.
         Each new command that the user enters is captured and yielded to
         the caller."""
-        console = self.new_console({})
+        console = self.new_console(data)
         for value in console.interact(""):
              yield value
             
@@ -32,11 +33,20 @@ class ExperimentalQuestion(ShellQuestion):
 
         # Loop until we get the correct answer.
         while True:
+            # Assuming data contains "official" variables pass a deep copy to
+            # get_response
+            dcp = deepcopy(data)
             # Get any values that the user generates, and pass them to
             # test_response.
-            for value in self.get_response(data=data):
-                if self.test_response(value, data=data):
-                    return
+            for value in self.get_response(data=dcp):
+                if self.test_response(value, data=dcp):
+                    # Since test was passed, modify and return the data
+                    data.update(value["added"])
+                    data.update(value["changed"])
+                    for k in value["removed"]:
+                        del data[k]
+                    print(data) # XXX remove
+                    return data
                 else:
                     try:
                         self.print_help(self.hint)
