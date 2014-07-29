@@ -146,7 +146,7 @@ class Question(object):
             # Try to construct a class from the result (as **kwargs).
             # The __init__ method *should* ensure that the required
             # fields are present.
-            questions.append(cls(**document))
+            questions.append(cls(method="yaml", **document))
 
         return questions
 
@@ -160,10 +160,21 @@ class CategoryQuestion(Question):
     # Mark this class as an abstract.
     __metaclass__ = abc.ABCMeta
 
-    def __init__(self, category, output, **kwargs):
+    def __init__(self, category, output, method=None, **kwargs):
         self.category = category
         self.output = output
         self.__dict__.update(kwargs)
+
+        # If present, run any hooks associated with the method. For
+        # example, patching up YAML.
+        if hasattr(self, "%s_hook" % method):
+            getattr(self, "%s_hook" % method)()
+
+    def yaml_hook(self):
+        """Invoked after class instantiation, if the instantiation
+        method is 'yaml'. Can be overridden to implement per-question
+        type corrections from YAML."""
+        pass
 
 # XXX: Add a simpler way to drop out of the shell than asking the user
 # to exit.
