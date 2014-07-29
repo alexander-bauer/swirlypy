@@ -18,8 +18,8 @@ class GetValueQuestion(ShellQuestion):
         if response == None:
             return None
 
-        if type(self.values) == str:
-            return response in self.values.split(";")
+        if type(self.values) == list:
+            return response in self.values
         else:
             return response == self.values
 
@@ -50,6 +50,12 @@ class GetValueQuestion(ShellQuestion):
         newlocals = locals.copy()
         newlocals["__swirlypy_recorder__"] = self._recorder
         return ValuePeekerConsole(newlocals)
+
+    def yaml_hook(self):
+        # If the values format follows the '1;2;3;4' format, make it a
+        # list for simplicity.
+        if (type(self.values) == str) and (";" in self.values):
+            self.values = self.values.split(";")
 
 class ValuePeekerConsole(code.InteractiveConsole):
     """Allows the user to interact with a console, and yields each value
