@@ -4,7 +4,7 @@ import random
 
 class MultipleChoiceQuestion(CategoryQuestion):
 
-    _required_ = ['choices', 'correctanswer']
+    _required_ = ['choices', 'answer']
 
     def get_response(self, data={}):
         # Parse the options and shuffle them, for variety.
@@ -36,4 +36,4 @@ class MultipleChoiceQuestion(CategoryQuestion):
 
     def test_response(self, response, data={}):
         """Check the response in the simplest way possible."""
-        return response == self.correctanswer
+        return response == self.answer

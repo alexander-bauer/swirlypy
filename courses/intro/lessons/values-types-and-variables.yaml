@@ -12,7 +12,7 @@
 - Category: multiplechoice
   Output: "If you wanted the output, Jinkies!, which of the following commands should you type?"
   Choices: print('Jinkies!');print('Jinkies');print('Scooby-dooby-do, where are you?');print('If it weren't for those meddling kids!')
-  CorrectAnswer: print('Jinkies!')
+  Answer: print('Jinkies!')
   Hint: "Look for the command, print, and the word, 'Jinkies!' (with an !)"
 
 - Category: command
@@ -55,13 +55,13 @@
 - Category: multiplechoice
   Output: "Since we want time per mile rather than time per kilometer, we can first convert 10 kilometers to equivalent miles, using one of the four arithmetic operators just mentioned. Which of the following expressions would we use?"
   Choices: 10/1.61;10*1.61;10+1.61;10-1.61
-  CorrectAnswer: 10/1.61
+  Answer: 10/1.61
   Hint: "Since miles are longer than kilometers, the answer will be less than 10. If you run 1.61 kilometers, you have run 1 mile. If you run 2*1.61 kilometers, you have run 2 miles, and so on."
 
 - Category: multiplechoice
   Output: "Ten kilometers is about 10/1.61, or 6.2, miles. Your total time was 43 minutes and 30 seconds so your time in minutes per mile would be given by which of the following?"
   Choices: 6.2/43.5;43.5/6.2;6.2*43.5
-  CorrectAnswer: 43.5/6.2
+  Answer: 43.5/6.2
   Hint: "43 minutes and 30 seconds are 43.5 minutes. Since you took 43.5 minutes to run 6.2 miles, how many minutes did each of those miles take?"
 
 - Category: command
