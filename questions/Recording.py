@@ -5,10 +5,11 @@ from copy import deepcopy
 from swirlypy.dictdiffer import DictDiffer
 
 class RecordingQuestion(ShellQuestion):
+    
         # Mark this class as an abstract.
      __metaclass__ = abc.ABCMeta
 
-     _required_ = [ "answer" ]
+     _required_ = [ ] # Required fields will depend on subclass
      
      def get_response(self, data={}):
          """Interacts with the user until broken from, or reaches EOF.
@@ -17,10 +18,11 @@ class RecordingQuestion(ShellQuestion):
          console = self.new_console(data)
          for value in console.interact(""):
              yield value
-            
+      
+     @abc.abstractmethod       
      def test_response(self, response, data={}):
-         """Just prints responses and returns True."""
-        
+        """"""
+    
      def execute(self, data={}):
          self.print()
          
@@ -72,10 +74,12 @@ class RecordingConsole(code.InteractiveConsole):
          # If the compilation succeeded, as indicated by its object not being
          # None, and no exception having occurred, parse it with AST and
          # store that.
-         # XXX. Add code to get values
          if compiled != None:
              self.latest_parsed = ast.parse(source, filename, symbol)
              CaptureExprs().visit(self.latest_parsed)
+             # Since latest_parsed has been altered to capture values computed
+             # but not assigned, store an unaltered copy for testing.
+             self.clean_parsed = ast.parse(source, filename, symbol)
             
          return compile(self.latest_parsed, filename, symbol)
         
@@ -107,7 +111,7 @@ class RecordingConsole(code.InteractiveConsole):
          while 1:
              # Reset the value of latest_parsed.
              self.latest_parsed = None
-             # WRB: make a copy of locals
+             # Make a copy of locals
              cpylocals = self.locals.copy()
              
              try:
@@ -122,7 +126,7 @@ class RecordingConsole(code.InteractiveConsole):
                      break
                  else:
                      more = self.push(line)
-                     # WRB: A DictDiffer object has 4 fields: added, changed, removed, unchanged,
+                     # A DictDiffer object has 4 fields: added, changed, removed, unchanged,
                      # These are sets containing variable names only. Attaching values:
                      diffs = DictDiffer(self.locals, cpylocals)
                      ad =dict()
@@ -137,7 +141,7 @@ class RecordingConsole(code.InteractiveConsole):
                      # Check to see if a new value has been parsed yet.
                      # If so, yield various useful things. 
                      if self.latest_parsed != None:
-                         yield {"ast":self.latest_parsed,  "added":ad, "changed":ch, \
+                         yield {"ast":self.clean_parsed,  "added":ad, "changed":ch, \
                          "removed":rv, "values":self.locals["__swirlypy_recorder__"]}
                          
              except KeyboardInterrupt:
