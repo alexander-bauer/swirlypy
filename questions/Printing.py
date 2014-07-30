@@ -1,4 +1,4 @@
-from swirlypy.questions.Experimental import *
+from swirlypy.questions.Recording import *
 
 class PrintingQuestion(RecordingQuestion):
      
@@ -16,6 +16,9 @@ class PrintingQuestion(RecordingQuestion):
             print("removed: ", response["removed"])
         if "values" in response:
             print("\nvalues: ", response["values"])
-        print("data: ",data)
         return True
+        
+     def execute(self, data={}):
+         super().execute(data=data)
+         print("data: ", data)
 
