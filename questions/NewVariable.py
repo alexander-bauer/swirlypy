@@ -11,7 +11,7 @@ class NewVariableQuestion(ShellQuestion):
         # Parse the variable list.
         # XXX: Make this more flexible, particularly allowing for named
         # variables.
-        mustaddvals = str(self.variables).split(";")
+        mustaddvals = self.variables
         print(response.added())
 
         # For each required new value, loop through the list of added
@@ -29,3 +29,7 @@ class NewVariableQuestion(ShellQuestion):
         # If we exit the loop without failing, then we must've found all
         # of our requirements.
         return True
+
+    def yaml_hook(self):
+        if type(self.variables) == str:
+            self.variables = self.variables.split(";")
