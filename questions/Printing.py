@@ -2,7 +2,7 @@ from swirlypy.questions.Recording import *
 
 class PrintingQuestion(RecordingQuestion):
      
-     def test_response(self, response, data={}):
+    def test_response(self, response, data={}):
         """
         just prints responses and returns True.
         """
@@ -18,7 +18,7 @@ class PrintingQuestion(RecordingQuestion):
             print("\nvalues: ", response["values"])
         return True
         
-     def execute(self, data={}):
-         super().execute(data=data)
-         print("state: ", data["state"])
+    def execute(self, data={}):
+        super().execute(data=data)
+        print("state: ", data["state"])
 
