@@ -28,18 +28,21 @@ class RecordingQuestion(ShellQuestion):
          
          # Loop until we get the correct answer.
          while True:
-             # Assuming data contains "official" variables pass a deep copy to
-             # get_response
-             dcp = deepcopy(data)
+             # If data does not contain a lesson state, create one
+             if not "state" in data:
+                 data["state"] = dict()
+             # To avoid corruption through user errors the user should not be given 
+             # direct access to the state. Hence, make a deep copy.
+             dcp = deepcopy(data["state"])
              # Get any values that the user generates, and pass them to
              # test_response.
              for value in self.get_response(data=dcp):
                  if self.test_response(value, data=dcp):
                      # Since test was passed, modify and return the data
-                     data.update(value["added"])
-                     data.update(value["changed"])
+                     data["state"].update(value["added"])
+                     data["state"].update(value["changed"])
                      for k in value["removed"]:
-                         del data[k]
+                         del data["state"][k]
                      return data
                  else:
                      try:

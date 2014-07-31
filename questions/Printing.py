@@ -20,5 +20,5 @@ class PrintingQuestion(RecordingQuestion):
         
      def execute(self, data={}):
          super().execute(data=data)
-         print("data: ", data)
+         print("state: ", data["state"])
 
