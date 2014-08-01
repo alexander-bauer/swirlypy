@@ -1,3 +1,6 @@
+- Category: hello
+  Output: ""
+
 - Category: text
   Output: "Here we present some tricky questions for testing Swirlypy."
 
