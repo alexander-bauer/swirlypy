@@ -59,11 +59,11 @@ class Course:
         safely."""
 
         # Keep track of whether there have been any fatal errors.
-        no_errors = True
+        errs = False
 
         # Define some convenience functions.
         def print_err(string):
-            no_errors = False
+            errs = True
             colors.print_err(string)
 
         def print_warn(string):
@@ -94,17 +94,19 @@ class Course:
                 print_err("Could not load lesson from file: '%s'" % e)
 
             # If the load failed in any way, abort here.
-            if l != None:
+            if l == None:
                 continue
 
-            try:
-                l.validate()
-            except AttributeError:
+            # Run validate on the lesson, if available, and pass it
+            # out print functions.
+            if hasattr(l, "validate"):
+                l.validate(print_err, print_warn)
+            else:
                 print_warn("%s has no self-tests" %
                         self.lessonnames[lesson_number - 1])
 
         # Return whether there were any fatal errors.
-        return no_errors
+        return not errs
 
     def execute(self):
         """Repeatedly prompts the user for lessons to run until

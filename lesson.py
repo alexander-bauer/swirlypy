@@ -24,6 +24,14 @@ class Lesson:
         # Return the data, with whatever updates have been applied.
         return data
 
+    def validate(self, on_err, on_warn):
+        for index, question in enumerate(self.questions):
+            if hasattr(question, "selftest"):
+                question.selftest(on_err, on_warn)
+            else:
+                on_warn("%s at index %d has no self tests" %
+                        (type(question).__name__, index))
+
     @classmethod
     def load_yaml(cls, file):
         """Loads questions from the given YAML file using
