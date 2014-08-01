@@ -8,6 +8,7 @@ import tempfile
 from swirlypy.errors import *
 import swirlypy.colors as colors
 from swirlypy.colors import color, colorize
+import swirlypy.questions
 
 class Course:
     """Course is a concrete representation of a collection of lessons
@@ -204,6 +205,16 @@ class Course:
             # Fill in the previous metadata here.
             course.pkgname = pkgname
             course.packaged = packaged
+
+            # If the course has supplementary question types, then load
+            # them.
+            extra_questionsdir = os.path.join(course.coursedir,
+                    "questions")
+            if os.path.isdir(extra_questionsdir):
+                print("Loading extra questions from %s" %
+                        extra_questionsdir)
+                swirlypy.questions.load(extra_questionsdir)
+                print(swirlypy.questions.categories)
 
             # Finally, return it.
             return course
