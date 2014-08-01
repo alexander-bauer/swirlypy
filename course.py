@@ -211,10 +211,7 @@ class Course:
             extra_questionsdir = os.path.join(course.coursedir,
                     "questions")
             if os.path.isdir(extra_questionsdir):
-                print("Loading extra questions from %s" %
-                        extra_questionsdir)
                 swirlypy.questions.load(extra_questionsdir)
-                print(swirlypy.questions.categories)
 
             # Finally, return it.
             return course

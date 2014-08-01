@@ -9,9 +9,7 @@ def load(path):
     # Path needs to be a list in order for the following calls to work.
     if type(path) != list: path = [path]
     # Walk the directory.
-    print("Walking %s" % path)
     for loader, name, ispkg in pkgutil.walk_packages(path):
-        print("Found %s" % name)
         module = loader.find_module(name).load_module(name)
 
         # Try to find the module's defined class, and add it to the
