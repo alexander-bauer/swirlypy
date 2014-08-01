@@ -11,7 +11,7 @@
   Output: "Here we create a variable for use in subsequent questions. Set x=10"
   Answer: x = 10
   Hint: "Enter x = 10"
-  Variables: 10
+  Variables: [10]
 
 # XXX. Allow entering x to be the right thing to do.
 - Category: getvalue
