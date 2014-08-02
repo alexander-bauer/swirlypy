@@ -15,10 +15,10 @@ class NewVariableQuestion(RecordingQuestion):
             # Check whether all required variables have been assigned and
             # have the correct values.
             if not k in didasgn:
-                self.hint = "You neglected to create the variable, " + k
+                self.hint = "You neglected to create the variable, " + k + "."
                 return False
             if mustasgn[k] != didasgn[k] :
-                self.hint = "You assigned the wrong value to the variable, " + k
+                self.hint = "You assigned the wrong value to the variable, " + k +"."
                 return False
         # If we exit the loop without failing, then we must've found all
         # of our requirements.

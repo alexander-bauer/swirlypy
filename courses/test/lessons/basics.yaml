@@ -1,13 +1,3 @@
-- Category: newvariable
-  Output: "Assign x=10, for use in a subsequent question."
-  Variables: {'x':10}
-  Hint: "Enter x=10."
-
-- Category: newvariable
-  Output: "The correct answer to this question is x = 2*x. However, for testing purposes, first enter x=3*x"
-  Variables: {'x':20}
-  Hint: "Now enter the correct answer, x=2*x"
-
 - Category: text
   Output: "This is an example course for testing Swirlypy."
 
@@ -26,4 +16,15 @@
   Output: "Try running dir() on the integer 1."
   Answer: dir(1)
   Hint: "Make sure that you use function(parameter) syntax."
+
+- Category: newvariable
+  Output: "Assign x=10, for use in a subsequent question."
+  Variables: {'x':10}
+  Hint: "Enter x=10."
+
+- Category: newvariable
+  Output: "The correct answer to this question is x = 2*x. However, for testing purposes, first enter x=3*x. 
+    Enter the correct answer on a subsequent try. The value of x should be reset to 10 after incorrect entries."
+  Variables: {'x':20}
+  Hint: "Now enter the correct answer, x=2*x"
 

@@ -49,6 +49,7 @@ class RecordingQuestion(ShellQuestion):
                         colors.print_help(self.hint)
                     except AttributeError:
                         pass
+                    break
 
     def new_console(self, locals):
         """Creates a new recording console and recorder, and includes the recorder
