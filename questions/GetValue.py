@@ -3,7 +3,7 @@ import code, ast, sys
 
 class GetValueQuestion(RecordingQuestion):
     
-    _required_ = [ "values" ]
+    _required_ = [ "value" ]
     #~ def get_response(self, data={}):
         #~ """Interacts with the user until broken from, or reaches EOF.
         #~ Each new expression, such as 'x**2', but unlike 'y = x**2', is
@@ -18,7 +18,20 @@ class GetValueQuestion(RecordingQuestion):
         # XXX: Allow for matching values of None.
         if response == None:
             return None
-        # Note that response["values"] will always be of type Recorder (a subclass of list).
-        # For now, the response will be considered correct if and only if some member
-        # of response["values"] equals self.values.
-        return self.values in response["values"]
+        # Note that response["values"] will always be of type Recorder
+        # (a subclass of list).  For now, the response will be
+        # considered correct if and only if some member of
+        # response["values"] equals self.values.
+        return self.value in response["values"]
+
+    def yaml_hook(self):
+        # If type is present, use 'value' to construct the type.
+        if hasattr(self, "type"):
+            # Try to evaluate the type as a builtin.
+            # XXX: This only supports builtings.
+            if hasattr(__builtins__, self.type):
+                newtype = getattr(__builtins__, self.type)
+                if type(self.value) == list:
+                    self.value = newtype(**self.value)
+                else:
+                    self.value = newtype(self.value)
