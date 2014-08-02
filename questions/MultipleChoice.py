@@ -38,6 +38,12 @@ class MultipleChoiceQuestion(CategoryQuestion):
         """Check the response in the simplest way possible."""
         return response == self.answer
 
+    def selftest(self, on_err, on_warn):
+        if self.answer not in self.choices:
+            on_err("answer \"%s\" not in available choices" % self.answer)
+        if not self.test_response(self.answer):
+            on_err("test_response fails with correct answer")
+
     def yaml_hook(self):
         if type(self.choices) == str:
             self.choices = self.choices.split(";")
