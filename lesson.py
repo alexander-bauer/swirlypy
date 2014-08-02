@@ -26,11 +26,19 @@ class Lesson:
 
     def validate(self, on_err, on_warn):
         for index, question in enumerate(self.questions):
+            # Wrap on_err and on_warn with an index number.
+            def question_on_err(string):
+                on_err("%s at index %d: %s" % (
+                    type(question).__name__, index, string))
+
+            def question_on_warn(string):
+                on_warn("%s at index %d: %s" % (
+                    type(question).__name__, index, string))
+
             if hasattr(question, "selftest"):
-                question.selftest(on_err, on_warn)
+                question.selftest(question_on_err, question_on_warn)
             else:
-                on_warn("%s at index %d has no self tests" %
-                        (type(question).__name__, index))
+                question_on_warn("no self tests")
 
     @classmethod
     def load_yaml(cls, file):
