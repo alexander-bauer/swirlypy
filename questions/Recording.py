@@ -1,8 +1,8 @@
 from swirlypy.question import ShellQuestion
-# from swirlypy.questions.GetValue import CaptureExprs, Recorder
 import code, ast, sys, abc
 from copy import deepcopy
 from swirlypy.dictdiffer import DictDiffer
+import swirlypy.colors as colors
 
 class RecordingQuestion(ShellQuestion):
     
@@ -46,7 +46,7 @@ class RecordingQuestion(ShellQuestion):
                     return data
                 else:
                     try:
-                        self.print_help(self.hint)
+                        colors.print_help(self.hint)
                     except AttributeError:
                         pass
 

@@ -13,8 +13,6 @@ class GetValueQuestion(RecordingQuestion):
             #~ yield value
 
     def test_response(self, response, data={}):
-        print("fields:", self.__dict__ )
-        print(self.hint)
         # Instead of matching if the response is None, disregard the
         # "submission."
         # XXX: Allow for matching values of None.
