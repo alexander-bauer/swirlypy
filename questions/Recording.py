@@ -1,5 +1,5 @@
 from swirlypy.question import ShellQuestion
-from swirlypy.questions.GetValue import CaptureExprs, Recorder
+# from swirlypy.questions.GetValue import CaptureExprs, Recorder
 import code, ast, sys, abc
 from copy import deepcopy
 from swirlypy.dictdiffer import DictDiffer
@@ -151,3 +151,20 @@ class RecordingConsole(code.InteractiveConsole):
                 self.write("\nKeyboardInterrupt\n")
                 self.resetbuffer()
                 more = 0
+
+class CaptureExprs(ast.NodeTransformer):
+    def visit_Expr(self, node):
+        newnode = ast.copy_location(ast.Expr(value = ast.Call(func =
+            ast.Attribute(value = ast.Name(id='__swirlypy_recorder__',
+                ctx=ast.Load()), attr="record", ctx=ast.Load()),
+            args=[node.value], keywords=[], starargs=None,
+            kwargs=None)), node)
+        ast.fix_missing_locations(newnode)
+        return newnode
+
+class Recorder(list):
+    def record(self, value):
+        """Appends the given value to the interal list, and returns the
+        same value."""
+        self.append(value)
+        return value
