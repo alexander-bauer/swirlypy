@@ -23,4 +23,18 @@ contain the following fields: `course` (course title),
 readable author name or names). It may also contain: `description`
 (explanatory text), `organization` (name of the course's sponsoring
 organization), `version` (a string, usually of numbers), and `published`
-(a timestamp in YAML format).
+(a timestamp in YAML format). An example is available
+[here][intro_courseyaml].
+
+### Lesson files
+
+Lessons are YAML files contained in the `lessons/` subdirectory. Their
+filenames are "sluggified," meaning that all non-ascii characters are
+replaced by dashes, and all ascii characters are lowercased. For
+example, a lesson called "Basics in Statistics" will be in a file named
+`basics-in-statistics.yaml`.
+
+Each lesson is, itself, simply a list (what YAML calls a sequence) of
+questions.
+
+[intro_courseyaml]: https://github.com/SashaCrofter/swirlypy/blob/master/courses/intro/course.yaml
