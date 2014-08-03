@@ -35,6 +35,26 @@ example, a lesson called "Basics in Statistics" will be in a file named
 `basics-in-statistics.yaml`.
 
 Each lesson is, itself, simply a list (what YAML calls a sequence) of
-questions.
+questions. Fields at the root of lessons are not case sensitive, and an
+example lesson can be seen [here][intro_basicsyaml].
+
+### Questions
+
+Questions are, under the hood, all descended from a particular Python
+class. As such, they share certain properties, including the way they
+are parsed from YAML. Fields at the root are not case sensitive, and
+they are used as keyword arguments to construct Questions matching the
+listed category. For example, a Question of the "text" category will
+construct a TextQuestion.
+
+The exact fields required by each question are determined by the type of
+question, but they at least require `Category` and `Output`. All of the
+questions in the standard library can be found [here][question_stdlib].
+
+Furthermore, new questions can be defined within courses by placing them
+within a `questions` subdirectory, the same as with the standard
+library.
 
 [intro_courseyaml]: https://github.com/SashaCrofter/swirlypy/blob/master/courses/intro/course.yaml
+[intro_basicsyaml]: https://github.com/SashaCrofter/swirlypy/blob/master/course/intro/lessons/basics.yaml
+[question_stdlib]: https://github.com/SashaCrofter/swirlypy/tree/master/questions/
