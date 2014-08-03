@@ -9,7 +9,7 @@
 
 - Category: getvalue
   Output: "What is the square of 256?"
-  Values: 65536
+  Value: 65536
   Hint: "The square operator is ** in Python"
 
 - Category: command
