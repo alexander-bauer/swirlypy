@@ -55,6 +55,13 @@ Furthermore, new questions can be defined within courses by placing them
 within a `questions` subdirectory, the same as with the standard
 library.
 
+### Packaging your Course
+
+The `swirlytool` application that comes with Swirlypy is capable of
+packaging a course by using the `create` subcommand. This produces a
+Swirlypy course file, which is just a gzipped tar file with a particular
+format.
+
 [intro_courseyaml]: https://github.com/SashaCrofter/swirlypy/blob/master/courses/intro/course.yaml
 [intro_basicsyaml]: https://github.com/SashaCrofter/swirlypy/blob/master/course/intro/lessons/basics.yaml
 [question_stdlib]: https://github.com/SashaCrofter/swirlypy/tree/master/questions/
