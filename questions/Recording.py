@@ -129,8 +129,10 @@ class RecordingConsole(code.InteractiveConsole):
                     self.write("\n")
                     break
                 else:
+                    if line == '':
+                        break
                     more = self.push(line)
-                    # A DictDiffer object has 4 fields: added, changed, removed, unchanged,
+                   # A DictDiffer object has 4 fields: added, changed, removed, unchanged,
                     # These are sets containing variable names only. Attaching values:
                     diffs = DictDiffer(self.locals, cpylocals)
                     ad =dict()
