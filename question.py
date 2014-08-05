@@ -150,6 +150,35 @@ class Question(object):
 
         return questions
 
+    @classmethod
+    def doc(cls):
+        def attrelseundoc(obj, string):
+            """Returns the attribute represented by the object and
+            string, unless it is in None, in which case it is replaced
+            by "undocumented"."""
+            attr = None
+            if hasattr(obj, string):
+                attr = getattr(obj, string)
+
+            return attr if attr != None else "undocumented"
+
+        # Find a list of all attributes containing "_hook" of the class.
+        hookpairs = [(key, val) for key, val in cls.__dict__.items() \
+                    if "_hook" in key]
+
+        # Format the hook documentation nicely, if available.
+        hookdocs = "\n".join(("  %s: %s" % (name, attrelseundoc(hook,
+            "__doc__")) for name, hook in hookpairs))
+
+        required = ', '.join(cls._required_) if \
+                hasattr(cls, "required") else None
+
+        docs = attrelseundoc(cls, "__doc__")
+
+        return "%s\n\nRequired: %s\n\nHooks:\n%s" % (docs, required, \
+                hookdocs)
+
+
 class CategoryQuestion(Question):
     """CategoryQuestion is another abstract class that includes some of
     the boilerplate necessary to build safe questions that behave
