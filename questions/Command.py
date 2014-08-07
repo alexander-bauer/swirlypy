@@ -15,7 +15,7 @@ matter."""
         # We have to test their string dumps, because otherwise
         # it will resort to reference equality.
         # XXX: Find a more elegant way to do this.
-        return ast.dump(answer_tree) == ast.dump(response["ast"])
+        return ast.dump(self.answer_tree) == ast.dump(response["ast"])
 
     def yaml_hook(self):
         """Parses given answer as an AST and stores it as
