@@ -35,6 +35,10 @@ class Lesson:
                 on_warn("%s at index %d: %s" % (
                     type(question).__name__, index, string))
 
+            if hasattr(question, "basic_selftest"):
+                question.basic_selftest(question_on_err,
+                        question_on_warn)
+
             if hasattr(question, "selftest"):
                 question.selftest(question_on_err, question_on_warn)
             else:

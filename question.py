@@ -178,6 +178,28 @@ class Question(object):
         return "%s\n\nRequired: %s\n\nHooks:\n%s" % (docs, required, \
                 hookdocs)
 
+    @classmethod
+    def basic_selftest(cls, on_err, on_warn):
+        def present_value(obj, string):
+            """Return whether the given object's field is both present
+and a value other than None or empty string."""
+            attr = None
+            if hasattr(obj, string): attr = getattr(obj, string)
+            return not (attr == None or \
+                    (type(attr) == str and attr == ""))
+
+        if not present_value(cls, "__doc__"):
+            on_warn("Question not documented")
+
+        if not present_value(cls, "_required_"):
+            on_warn("Requirements not explicitly stated")
+
+        hookpairs = ((key, val) for key, val in cls.__dict__.items() \
+                if "_hook" in key)
+
+        for hookname, hook in hookpairs:
+            if not present_value(hook, "__doc__"):
+                on_warn("%s not documented" % hookname)
 
 class CategoryQuestion(Question):
     """CategoryQuestion is another abstract class that includes some of
