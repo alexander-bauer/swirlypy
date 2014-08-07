@@ -12,12 +12,14 @@ matter."""
     _required_ = [ "answer" ]
     
     def test_response(self, response, data={}):
-        # Parse the provided correct answer in the same way it's parsed
-        # by the CommandReturnerConsole.
-        answer_tree = ast.parse(self.answer, filename="<answer>", \
-                mode="single")
-
-        # Now, we have to test their string dumps, because otherwise
+        # We have to test their string dumps, because otherwise
         # it will resort to reference equality.
         # XXX: Find a more elegant way to do this.
         return ast.dump(answer_tree) == ast.dump(response["ast"])
+
+    def yaml_hook(self):
+        """Parses given answer as an AST and stores it as
+answer_tree."""
+        # Parse the provided correct answer a standard way.
+        self.answer_tree = ast.parse(self.answer, filename="<answer>", \
+                mode="single")
