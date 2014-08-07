@@ -3,6 +3,8 @@ import swirlypy.colors as colors
 import random
 
 class MultipleChoiceQuestion(CategoryQuestion):
+    """Presents a list of options in random order to the user to select
+a correct ansewr from."""
 
     _required_ = ['choices', 'answer']
 
@@ -45,5 +47,7 @@ class MultipleChoiceQuestion(CategoryQuestion):
             on_err("test_response fails with correct answer")
 
     def yaml_hook(self):
+        """If `choices` is a string, split is on semicolon to form a
+list."""
         if type(self.choices) == str:
             self.choices = self.choices.split(";")

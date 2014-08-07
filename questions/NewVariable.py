@@ -1,6 +1,9 @@
 from swirlypy.questions.Recording import RecordingQuestion
 
 class NewVariableQuestion(RecordingQuestion):
+    """A shell is presented to the user. Every time the user enters a
+command, their environment is checked for new variables. If all of the
+required variables are satisfied, then the question is exited from."""
 
     _required_ = ["variables"]
 

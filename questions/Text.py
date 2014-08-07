@@ -1,6 +1,7 @@
 from swirlypy.question import CategoryQuestion
 
 class TextQuestion(CategoryQuestion):
+    """Displays text to the user and waits for newline."""
     def execute(self, data={}):
         self.print()
         self.get_response()
