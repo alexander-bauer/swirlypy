@@ -12,16 +12,22 @@ class RecordingQuestion(ShellQuestion):
     _required_ = [ ] # Required fields will depend on subclass
      
     def get_response(self, data={}):
-        """Interacts with the user until broken from, or reaches EOF.
-        Each new command that the user enters is captured and yielded to
-        the caller."""
+        """Interacts with the user until a valid command is entered.
+        Returns a dictionary with several keys: response["ast"] is a parsed
+        version of the command which was entered, keys "added", "changed", 
+        and "removed" refer to named variables which were respectively 
+        added, changed, or removed by the command, and key "values" 
+        aggregates any values which were computed but not assigned to
+        variables.
+         """
         console = self.new_console(data)
         for value in console.interact(""):
             yield value
       
     @abc.abstractmethod       
     def test_response(self, response, data={}):
-        """"""
+        """When implemented, tests response in a manner appropriate
+        to the subclass, returning True or False accordingly."""
     
     def execute(self, data={}):
         self.print()
