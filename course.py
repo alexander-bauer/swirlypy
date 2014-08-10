@@ -138,7 +138,7 @@ class Course:
         lesson = self.load_lesson(identifier)
 
         # Execute it.
-        data = lesson.execute(initial_data={"coursedir" : self.coursedir})
+        data = lesson.execute(initial_data={"coursedir" : self.coursedir, "rawdir" : self.rawdir})
 
         # Print a seperator to show it's complete.
         print()
