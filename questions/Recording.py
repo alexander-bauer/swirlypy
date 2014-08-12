@@ -91,7 +91,7 @@ class RecordingConsole(code.InteractiveConsole):
             # but not assigned, store an unaltered copy for testing.
             self.clean_parsed = ast.parse(source, filename, symbol)
             
-        return compile(self.latest_parsed, filename, symbol)
+            return compile(self.latest_parsed, filename, symbol)
         
     def interact(self, banner=None):
         """Interacts with the user. Each time a complete command is
@@ -130,13 +130,18 @@ class RecordingConsole(code.InteractiveConsole):
                 else:
                     prompt = sys.ps1
                 try:
+                    # If we're not at an indented prompt (that is, not
+                    # getting "more"), then we need to ignore empty
+                    # lines. However, they are valid for "more"
+                    # contexts.
+
                     line = self.raw_input(prompt)
+                    while (not more) and line == '':
+                        line = self.raw_input(prompt)
                 except EOFError:
                     self.write("\n")
                     break
                 else:
-                    if line == '':
-                        break
                     more = self.push(line)
                    # A DictDiffer object has 4 fields: added, changed, removed, unchanged,
                     # These are sets containing variable names only. Attaching values:
