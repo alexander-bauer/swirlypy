@@ -80,7 +80,6 @@ class RecordingConsole(code.InteractiveConsole):
         # which case we cannot proceed, but a full command will be
         # supplied eventually.
         compiled = code.compile_command(source, filename, symbol)
-         
         # If the compilation succeeded, as indicated by its object not being
         # None, and no exception having occurred, parse it with AST and
         # store that.
@@ -142,8 +141,19 @@ class RecordingConsole(code.InteractiveConsole):
                     self.write("\n")
                     break
                 else:
+                    # XXX. self. push(line) traps most exceptions, e.g. SyntaxError, internally
+                    # and prints a traceback to the console, thus warning the user
+                    # of an error. We should, in such cases, return the user to
+                    # the console without further ado. However, we must first detect
+                    # the occurrance of an internally trapped exception. The following
+                    # hack does the job but is, well, a hack.
+                    sys.last_value = None
                     more = self.push(line)
-                   # A DictDiffer object has 4 fields: added, changed, removed, unchanged,
+                    if sys.last_value != None:
+                        # a traceback was printed, hence the user made an error
+                        more = 0
+                        continue
+                    # A DictDiffer object has 4 fields: added, changed, removed, unchanged,
                     # These are sets containing variable names only. Attaching values:
                     diffs = DictDiffer(self.locals, cpylocals)
                     ad =dict()
