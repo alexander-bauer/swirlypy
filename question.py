@@ -21,7 +21,7 @@ class Question(object):
     # Mark this class as an abstract.
     __metaclass__ = abc.ABCMeta
 
-    _required_ = []
+    _required_ = None
 
     def __init__(self, category, output, **kwargs):
         """Tries to construct the most specific possible Question
@@ -189,10 +189,10 @@ and a value other than None or empty string."""
                     (type(attr) == str and attr == ""))
 
         if not present_value(cls, "__doc__"):
-            on_warn("Question not documented")
+            on_warn("not documented")
 
         if not present_value(cls, "_required_"):
-            on_warn("Requirements not explicitly stated")
+            on_warn("requirements not defined")
 
         hookpairs = ((key, val) for key, val in cls.__dict__.items() \
                 if "_hook" in key)
