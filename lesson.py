@@ -38,6 +38,8 @@ class Lesson:
             if hasattr(question, "basic_selftest"):
                 question.basic_selftest(question_on_err,
                         question_on_warn)
+            else:
+                question_on_warn("no basic self tests")
 
             if hasattr(question, "selftest"):
                 question.selftest(question_on_err, question_on_warn)

@@ -122,7 +122,6 @@ class RecordingConsole(code.InteractiveConsole):
             self.latest_parsed = None
             # Make a copy of locals
             cpylocals = self.locals.copy()
-             
             try:
                 if more:
                     prompt = sys.ps2
@@ -133,7 +132,6 @@ class RecordingConsole(code.InteractiveConsole):
                     # getting "more"), then we need to ignore empty
                     # lines. However, they are valid for "more"
                     # contexts.
-
                     line = self.raw_input(prompt)
                     while (not more) and line == '':
                         line = self.raw_input(prompt)
@@ -158,11 +156,14 @@ class RecordingConsole(code.InteractiveConsole):
                         continue
                     # A DictDiffer object has 4 fields: added, changed, removed, unchanged,
                     # These are sets containing variable names only. Attaching values:
+                    # A DictDiffer object has 4 fields: added, changed,
+                    # removed, unchanged, These are sets containing
+                    # variable names only. Attaching values:
                     diffs = DictDiffer(self.locals, cpylocals)
-                    ad =dict()
-                    for k in diffs.added()-{'__builtins__'}:
+                    ad = dict()
+                    for k in diffs.added() - {'__builtins__'}:
                         ad[k] = self.locals[k]
-                    ch= dict()
+                    ch = dict()
                     for k in diffs.changed():
                         ch[k] = self.locals[k]
                     rv = dict()
@@ -171,8 +172,11 @@ class RecordingConsole(code.InteractiveConsole):
                     # Check to see if a new value has been parsed yet.
                     # If so, yield various useful things. 
                     if self.latest_parsed != None:
-                        yield {"ast":self.clean_parsed,  "added":ad, "changed":ch, \
-                        "removed":rv, "values":self.locals["__swirlypy_recorder__"]}
+                        yield { "ast":     self.clean_parsed,
+                                "added":   ad,
+                                "changed": ch, "removed":rv,
+                                "values":  self.locals[
+                                    "__swirlypy_recorder__"]}
                          
             except KeyboardInterrupt:
                 self.write("\nKeyboardInterrupt\n")
@@ -181,11 +185,20 @@ class RecordingConsole(code.InteractiveConsole):
 
 class CaptureExprs(ast.NodeTransformer):
     def visit_Expr(self, node):
-        newnode = ast.copy_location(ast.Expr(value = ast.Call(func =
-            ast.Attribute(value = ast.Name(id='__swirlypy_recorder__',
-                ctx=ast.Load()), attr="record", ctx=ast.Load()),
-            args=[node.value], keywords=[], starargs=None,
-            kwargs=None)), node)
+        newnode = ast.copy_location(ast.Expr(
+                value = ast.Call(
+                    func = ast.Attribute(
+                        value = ast.Name(id='__swirlypy_recorder__',
+                                    ctx=ast.Load()),
+                                    attr="record",
+                                    ctx=ast.Load()),
+                                    args=[node.value],
+                                    keywords=[],
+                                    starargs=None,
+                                    kwargs=None
+                        )
+                    ),
+                node)
         ast.fix_missing_locations(newnode)
         return newnode
 
