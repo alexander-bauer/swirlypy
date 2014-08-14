@@ -141,19 +141,15 @@ class RecordingConsole(code.InteractiveConsole):
                 else:
                     # self. push(line) traps most exceptions internally
                     # and prints a traceback to the console, thus warning the user
-                    # of an error. We should, in such cases, return the user to
-                    # the console without further ado. However, we must first detect
-                    # the occurrance of an internally trapped exception. The following
-                    # hack does the job by testing if self.push(line) changes
-                    # sys.last_traceback. In the event of an exception, a new instance
-                    # will replace the old.
+                    # of an error. The following detects the event by checking
+                    # if self.push(line) changes sys.last_traceback. In the event 
+                    # of an exception, a new instance will replace the old.
                     tb0 = sys.last_traceback if hasattr(sys,"last_traceback") else None
                     more = self.push(line)
                     tb1 = sys.last_traceback if hasattr(sys,"last_traceback") else None
-                    if tb0 != tb1:
-                        # the user made an error so return to the prompt.
-                        more = 0
-                        continue
+                    # If an exception has occurred, retain a reference to 
+                    # the associated traceback for inclusion in `response`.
+                    tback = tb1 if tb0 != tb1 else None
                     # A DictDiffer object has 4 fields: added, changed, removed, unchanged,
                     # These are sets containing variable names only. Attaching values:
                     # A DictDiffer object has 4 fields: added, changed,
@@ -176,7 +172,8 @@ class RecordingConsole(code.InteractiveConsole):
                                 "added":   ad,
                                 "changed": ch, "removed":rv,
                                 "values":  self.locals[
-                                    "__swirlypy_recorder__"]}
+                                    "__swirlypy_recorder__"],
+                                "traceback": tback}
                          
             except KeyboardInterrupt:
                 self.write("\nKeyboardInterrupt\n")
