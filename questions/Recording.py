@@ -141,16 +141,19 @@ class RecordingConsole(code.InteractiveConsole):
                     self.write("\n")
                     break
                 else:
-                    # XXX. self. push(line) traps most exceptions, e.g. SyntaxError, internally
+                    # self. push(line) traps most exceptions internally
                     # and prints a traceback to the console, thus warning the user
                     # of an error. We should, in such cases, return the user to
                     # the console without further ado. However, we must first detect
                     # the occurrance of an internally trapped exception. The following
-                    # hack does the job but is, well, a hack.
-                    sys.last_value = None
+                    # hack does the job by testing if self.push(line) changes
+                    # sys.last_traceback. In the event of an exception, a new instance
+                    # will replace the old.
+                    tb0 = sys.last_traceback if hasattr(sys,"last_traceback") else None
                     more = self.push(line)
-                    if sys.last_value != None:
-                        # a traceback was printed, hence the user made an error
+                    tb1 = sys.last_traceback if hasattr(sys,"last_traceback") else None
+                    if tb0 != tb1:
+                        # the user made an error so return to the prompt.
                         more = 0
                         continue
                     # A DictDiffer object has 4 fields: added, changed, removed, unchanged,
