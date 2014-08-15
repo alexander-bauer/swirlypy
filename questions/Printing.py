@@ -1,6 +1,8 @@
 from swirlypy.questions.Recording import *
 
 class PrintingQuestion(RecordingQuestion):
+    """Prints debugging information as a variant of
+RecordingQuestion."""
      
     def test_response(self, response, data={}):
         """

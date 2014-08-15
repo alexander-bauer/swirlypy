@@ -2,15 +2,12 @@ from swirlypy.questions.Recording import RecordingQuestion
 import code, ast, sys
 
 class GetValueQuestion(RecordingQuestion):
+    """Presents the user with a shell, and captures every line of input
+which results in a value being computed, and specifically not captured
+in a variable. If the value captured matches the stored correct value,
+then the question is marked correct."""
     
     _required_ = [ "value" ]
-    #~ def get_response(self, data={}):
-        #~ """Interacts with the user until broken from, or reaches EOF.
-        #~ Each new expression, such as 'x**2', but unlike 'y = x**2', is
-        #~ captured and yielded to the caller."""
-        #~ console = self.new_console({})
-        #~ for value in console.interact(""):
-            #~ yield value
 
     def test_response(self, response, data={}):
         # Instead of matching if the response is None, disregard the
@@ -25,6 +22,11 @@ class GetValueQuestion(RecordingQuestion):
         return self.value in response["values"]
 
     def yaml_hook(self):
+        """If converted from YAML, perform the following
+transformations:
+        
+- If given, use the `type` attribute to convert `value` to that type. If
+  `value` is a list, then use it as `*args` to the type."""
         # If type is present, use 'value' to construct the type.
         if hasattr(self, "type"):
             # Try to evaluate the type as a builtin.
