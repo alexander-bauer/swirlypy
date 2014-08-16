@@ -14,6 +14,6 @@ setup(name='swirlypy',
         author='Alexander Bauer',
         author_email='sasha@crofter.org',
         url='https://github.com/SashaCrofter/swirlypy',
-        scripts=['swirlypy/utils/swirlytool.py'],
+        scripts=['swirlypy/utils/swirlytool'],
         packages=['swirlypy', 'swirlypy.questions']
         )
