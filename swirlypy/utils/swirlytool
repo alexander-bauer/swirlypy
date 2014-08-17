@@ -7,6 +7,7 @@
 import sys, argparse
 import os
 import tarfile
+import shutil, tempfile
 
 import swirlypy.colors as colors
 
@@ -63,10 +64,19 @@ def create(args):
     # Find the base name of the course.
     basecoursename = os.path.basename(args.course_path).split(".")[0]
 
-    # Change to the appropriate directory, so that our tar paths don't
-    # get screwed up.
-    os.chdir(os.path.dirname(args.course_path))
+    # Open a tar file to work with, to which we can add as we go.
     tar = tarfile.open(basecoursename + ".tar.gz", "w|gz")
+
+    # Copy the course into a separate, temporary directory so that we
+    # can make changes to the metadata.
+    tempdir = tempfile.TemporaryDirectory()
+    shutil.copytree(args.course_path, os.path.join(tempdir.name,
+        basecoursename))
+
+    # Change to the appropriate directory, so that our tar paths don't
+    # get screwed up, and then add all of the files in that
+    # subdirectory.
+    os.chdir(tempdir.name)
     tar.add(basecoursename)
 
 def test(args):
