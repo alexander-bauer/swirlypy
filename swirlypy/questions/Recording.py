@@ -121,7 +121,7 @@ class RecordingConsole(code.InteractiveConsole):
             # Reset the value of latest_parsed.
             self.latest_parsed = None
             # Make a copy of locals
-            cpylocals = self.locals.copy()
+            cpylocals = deepcopy(self.locals)
             try:
                 if more:
                     prompt = sys.ps2
