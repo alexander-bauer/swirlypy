@@ -9,6 +9,7 @@ from swirlypy.errors import *
 import swirlypy.colors as colors
 from swirlypy.colors import color, colorize
 import swirlypy.questions
+from swirlypy.data import Data
 
 class Course:
     """Course is a concrete representation of a collection of lessons
@@ -137,8 +138,19 @@ class Course:
         # Load the lesson, if possible.
         lesson = self.load_lesson(identifier)
 
+        # If the "data" directory is present, load it up and pass it
+        # along in the lesson data.
+        if os.path.isdir(os.path.join(self.rawdir, "data")):
+            provided = Data(os.path.join(self.rawdir, "data"))
+        else:
+            provided = None
+
         # Execute it.
-        data = lesson.execute(initial_data={"coursedir" : self.coursedir, "rawdir" : self.rawdir})
+        data = lesson.execute(initial_data={
+            "coursedir": self.coursedir,
+            "rawdir":    self.rawdir,
+            "provided":  provided
+        })
 
         # Print a seperator to show it's complete.
         print()
