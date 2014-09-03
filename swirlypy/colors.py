@@ -1,4 +1,7 @@
 # Set up the ansi escape codes.
+
+import sys
+
 class UnknownANSICodeException(Exception): pass
 
 class ANSI:
@@ -31,6 +34,8 @@ class color(object):
         return wrap_color
 
 def colorize(string, ansispec):
+    if not sys.stdout.isatty():
+        return string
     ansi = interpret_ansispec(ansispec)
     return "%s%s%s" % (ansi, string, ANSI.RESET)
 
