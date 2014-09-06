@@ -31,12 +31,23 @@ def load_course(path):
         print("Does it have course.yaml?")
         return None
 
+def setColorize(args):
+    """Set colorize flag according to specification in args if given.
+    If the flag is not specified in args, colorize only if running
+    in a tty."""
+    if(not hasattr(args, 'colorize') or args.colorize == None):
+        colors.color.COLORIZE = sys.stdout.isatty()
+    else:
+        colors.color.COLORIZE = args.colorize
+
+
 def run(args):
     """Run a swirlypy course, packaged or raw."""
     course = load_course(args.course_path)
     if not course:
         return 1
-
+    # Set colorize flag
+    setColorize(args)
     # If successful, print its description and execute it.
     course.print()
     course.execute()
@@ -46,7 +57,8 @@ def info(args):
     course = load_course(args.course_path)
     if not course:
         return 1
-
+    # Set colorize flag
+    setColorize(args)
     # If successful, print its description, and some other data about
     # it: including...
     course.print()
@@ -106,10 +118,12 @@ def parse(args):
             a local file")
     run_command.add_argument("course_path", help="directory of or path \
         to directory containing course.yaml file")
+    run_command.add_argument("-c", "--colorize", dest="colorize", type=bool, default=None, help="colorize stdout?")
     run_command.set_defaults(func=run)
     info_command = subparsers.add_parser("info", help=info.__doc__)
     info_command.add_argument("course_path", help="directory of or path \
         to directory containing course.yaml file")
+    info_command.add_argument("-c", "--colorize", dest="colorize", type=bool, default=None, help="colorize stdout?")
     info_command.set_defaults(func=info)
     create_command = subparsers.add_parser("create", help=create.__doc__)
     create_command.add_argument("course_path", help="directory of or \

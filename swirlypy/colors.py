@@ -17,6 +17,8 @@ class color(object):
     function is a string which should be wrapped in ANSI codes. The
     ansispec format is 'component0;component1;...', where each component
     is a class member of ANSI. They are case-insensitive."""
+    
+    COLORIZE = None
 
     def __init__(self, ansispec):
         self.ansi = interpret_ansispec(ansispec)
@@ -34,7 +36,7 @@ class color(object):
         return wrap_color
 
 def colorize(string, ansispec):
-    if not sys.stdout.isatty():
+    if not color.COLORIZE:
         return string
     ansi = interpret_ansispec(ansispec)
     return "%s%s%s" % (ansi, string, ANSI.RESET)
