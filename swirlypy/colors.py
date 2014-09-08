@@ -1,7 +1,5 @@
 # Set up the ansi escape codes.
 
-import sys
-
 class UnknownANSICodeException(Exception): pass
 
 class ANSI:

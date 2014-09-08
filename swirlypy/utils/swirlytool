@@ -32,9 +32,8 @@ def load_course(path):
         return None
 
 def setColorize(args):
-    """Set colorize flag according to specification in args if given.
-    If the flag is not specified in args, colorize only if running
-    in a tty."""
+    """Set colorize flag according to specification in args if given,
+    defaulting to False otherwise."""
     if(not hasattr(args, 'colorize') or args.colorize == None):
         colors.color.COLORIZE = False
     else:
