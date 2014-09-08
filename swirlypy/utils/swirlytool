@@ -36,7 +36,7 @@ def setColorize(args):
     If the flag is not specified in args, colorize only if running
     in a tty."""
     if(not hasattr(args, 'colorize') or args.colorize == None):
-        colors.color.COLORIZE = sys.stdout.isatty()
+        colors.color.COLORIZE = False
     else:
         colors.color.COLORIZE = args.colorize
 
@@ -118,12 +118,12 @@ def parse(args):
             a local file")
     run_command.add_argument("course_path", help="directory of or path \
         to directory containing course.yaml file")
-    run_command.add_argument("-c", "--colorize", dest="colorize", type=bool, default=None, help="colorize stdout?")
+    run_command.add_argument("-c", "--colorize", dest="colorize", type=bool, default=False, help="colorize stdout?")
     run_command.set_defaults(func=run)
     info_command = subparsers.add_parser("info", help=info.__doc__)
     info_command.add_argument("course_path", help="directory of or path \
         to directory containing course.yaml file")
-    info_command.add_argument("-c", "--colorize", dest="colorize", type=bool, default=None, help="colorize stdout?")
+    info_command.add_argument("-c", "--colorize", dest="colorize", type=bool, default=False, help="colorize stdout?")
     info_command.set_defaults(func=info)
     create_command = subparsers.add_parser("create", help=create.__doc__)
     create_command.add_argument("course_path", help="directory of or \
