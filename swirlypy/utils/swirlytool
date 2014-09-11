@@ -39,6 +39,23 @@ def setColorize(args):
     else:
         colors.color.COLORIZE = args.colorize
 
+def setEditor(args):
+    """Set editor according to option -e or --editor in args if given.
+    If not given, attempt to use the EDITOR environmental variable. If
+    the environmental variable is not set, use the operating system
+    default."""
+    if("editor" in args and shutil.which(args.editor) != None):
+        swirlypy.course.Course.EDITOR = args.editor
+    elif("EDITOR" in os.environ and shutil.which(os.environ["EDITOR"]) != None):
+        swirlypy.course.Course.EDITOR = os.environ["EDITOR"]
+    elif(sys.platform.startswith("linux")):
+        swirlypy.course.Course.EDITOR = "vi"
+    elif(sys.platform.startswith("win")):
+        swirlypy.course.Course.EDITOR = "notepad"
+    elif(sys.platform.startswith("darwin")):
+        swirlypy.course.Course.EDITOR = "TextEdit"
+    elif(sys.platform.startswith("os2")):
+        swirlypy.course.Course.EDITOR = "SimpleText"
 
 def run(args):
     """Run a swirlypy course, packaged or raw."""
@@ -47,6 +64,8 @@ def run(args):
         return 1
     # Set colorize flag
     setColorize(args)
+    # Set editor
+    setEditor(args)
     # If successful, print its description and execute it.
     course.print()
     course.execute()
@@ -118,6 +137,7 @@ def parse(args):
     run_command.add_argument("course_path", help="directory of or path \
         to directory containing course.yaml file")
     run_command.add_argument("-c", "--colorize", dest="colorize", type=bool, default=False, help="colorize stdout?")
+    run_command.add_argument("-e", "--editor", dest="editor", type=str, help="specify text editor")
     run_command.set_defaults(func=run)
     info_command = subparsers.add_parser("info", help=info.__doc__)
     info_command.add_argument("course_path", help="directory of or path \

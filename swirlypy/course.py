@@ -14,6 +14,8 @@ from swirlypy.data import Data
 class Course:
     """Course is a concrete representation of a collection of lessons
     in one coherent unit."""
+    
+    EDITOR = ""
 
     def __init__(self, course, lessons, author, version, coursedir,
             **kwargs):
