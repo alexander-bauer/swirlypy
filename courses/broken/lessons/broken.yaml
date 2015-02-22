@@ -1,0 +1,35 @@
+- Category: text
+  Output: "This is an example course for testing Swirlypy."
+
+- Category: multiplechoice
+  Output: "What version control system is Swirlypy officially in?"
+  Choices: [git, svn, cvs, mercurial]
+  Answer: bazaar
+  Hint: "The same as the Linux kernel"
+
+- Category: getvalue
+  Output: "What is the square of 256?"
+  Value: 65536
+  Hint: "The square operator is ** in Python"
+
+- Category: command
+  Output: "Try running dir() on the integer 1."
+  Answer: dr1)
+  Hint: "Make sure that you use function(parameter) syntax."
+
+- Category: command
+  Output: "Try running dir() on the integer 1."
+  Answer: dr(1)
+  Hint: "Make sure that you use function(parameter) syntax."
+
+- Category: newvariable
+  Output: "Assign x=10, for use in a subsequent question."
+  Variables: {}
+  Hint: "Enter x=10."
+
+- Category: newvariable
+  Output: "The correct answer to this question is x = 2*x. However, for testing purposes, first enter x=3*x. 
+    Enter the correct answer on a subsequent try. The value of x should be reset to 10 after incorrect entries."
+  Variables: {'x':20}
+  Hint: "Now enter the correct answer, x=2*x"
+
