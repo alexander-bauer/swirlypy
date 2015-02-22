@@ -139,14 +139,22 @@ class Question(object):
         # Instantiate a list in which to return questions.
         questions = []
 
-        for document in y:
+        for idx, document in enumerate(y):
             # First, lowercase keys in the given document.
             document = dict((k.lower(), v) for k, v in document.items())
 
             # Try to construct a class from the result (as **kwargs).
             # The __init__ method *should* ensure that the required
             # fields are present.
+
+            try:
+                question = cls(method="yaml", **document)
+            except Exception as e:
+                raise CouldNotLoadQuestionsException("Could not load Question %d \
+in %s: %s" % (idx, file.name, e))
+
             questions.append(cls(method="yaml", **document))
+
 
         return questions
 

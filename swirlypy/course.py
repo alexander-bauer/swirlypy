@@ -91,8 +91,10 @@ class Course:
             # it.
             try:
                 l = self.load_lesson(lesson_number)
-            except FileNotFoundError as e:
-                print_err("Could not load lesson from file: '%s'" % e)
+            except (FileNotFoundError, CouldNotLoadQuestionsException) as e:
+                print_err("Could not load Lesson %d from file: '%s'" %
+                        (lesson_number, e))
+                continue
 
             # If the load failed in any way, abort here.
             if l == None:

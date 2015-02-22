@@ -5,5 +5,6 @@ class MissingFieldException(Exception):
     pass
 
 class UnknownQuestionCategoryException(Exception): pass
+class CouldNotLoadQuestionsException(Exception): pass
 class NoCoursePresentException(Exception): pass
 class NoSuchLessonException(Exception): pass
