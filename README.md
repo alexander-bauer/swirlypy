@@ -36,7 +36,7 @@ example, a lesson called "Basics in Statistics" will be in a file named
 
 Each lesson is, itself, simply a list (what YAML calls a sequence) of
 questions. Fields at the root of lessons are not case sensitive, and an
-example lesson can be seen [here][intro_basicsyaml].
+example lesson can be seen [here][intro_lessonyaml].
 
 ### Questions
 
@@ -62,6 +62,6 @@ packaging a course by using the `create` subcommand. This produces a
 Swirlypy course file, which is just a gzipped tar file with a particular
 format.
 
-[intro_courseyaml]: https://github.com/SashaCrofter/swirlypy/blob/master/courses/intro/course.yaml
-[intro_basicsyaml]: https://github.com/SashaCrofter/swirlypy/blob/master/course/intro/lessons/basics.yaml
-[question_stdlib]: https://github.com/SashaCrofter/swirlypy/tree/master/questions/
+[intro_courseyaml]: courses/intro/course.yaml
+[intro_lessonyaml]: courses/intro/lessons/values-types-and-variables.yaml
+[question_stdlib]: swirlpy/questions/
