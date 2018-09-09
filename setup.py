@@ -4,8 +4,11 @@ import subprocess, os
 from distutils.core import setup
 
 print("Obtaining version... ", end="")
-version = subprocess.check_output(["git", "describe", "--dirty=+"],
-        universal_newlines=True)
+try:
+    version = subprocess.check_output(["git", "describe", "--dirty=+"],
+            universal_newlines=True)
+except subprocess.CalledProcessError as e:
+    version = "0"
 print(version)
 
 setup(name='swirlypy',
