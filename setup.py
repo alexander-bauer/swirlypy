@@ -18,5 +18,6 @@ setup(name='swirlypy',
         author_email='sasha@linux.com',
         url='https://github.com/AlexanderBauer/swirlypy',
         scripts=['swirlypy/utils/swirlytool'],
-        packages=['swirlypy', 'swirlypy.questions']
+        packages=['swirlypy', 'swirlypy.questions'],
+        install_requires=['pyyaml'],
         )
