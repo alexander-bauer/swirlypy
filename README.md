@@ -15,6 +15,24 @@ with a particular directory structure. They are required to have a
 `course.yaml` file, which describes the course in general. In addition,
 they must contain a `lessons` directory, with lesson files (see below).
 
+## Running a Course
+
+For the purposes of development and testing, it is possible to run Swirlypy in
+a Python3 virtual environment. These are some steps, from the repository root:
+
+```
+virtualenv -p python3 env
+env/bin/pip install --editable .
+
+env/bin/swirlytool run courses/intro
+```
+
+If you activate the virtual environment with `env/bin/activate`, you won't need
+to specify `env/bin/` before `pip` or `swirlytool`.
+
+**Note**: Remember to specify the containing directory, not `course.yaml`, for
+unpackaged courses.
+
 ### Course Data
 
 The `course.yaml` file must be present in the root of the course, and
