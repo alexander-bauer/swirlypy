@@ -12,8 +12,8 @@ setup(name='swirlypy',
         version=version,
         description='Python courseware',
         author='Alexander Bauer',
-        author_email='sasha@crofter.org',
-        url='https://github.com/SashaCrofter/swirlypy',
+        author_email='sasha@linux.com',
+        url='https://github.com/AlexanderBauer/swirlypy',
         scripts=['swirlypy/utils/swirlytool'],
         packages=['swirlypy', 'swirlypy.questions']
         )
