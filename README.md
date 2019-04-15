@@ -1,3 +1,50 @@
+# Foreword (A Warning)
+
+
+**Quoting @WilCrofter on Swirlypy, April 09, 2019, in response to a
+recetly-opened issue:**
+> Swirlypy was a initial prototype created one afternoon by
+> @alexander-bauer at the behest of @WilCrofter (me) and @reginaastri,
+> two of the original [swirl](https://swirlstats.com/) developers. We
+> have never followed up on swirlypy and, other than proof-of-concept
+> material, there is no real course material associated with it.
+>
+> We left the prototype up on GitHub in case a future developer wanted to
+> follow up. Swirl's lead developer, @seankross, has expressed interest in
+> that possibility, but the likely candidates have been preoccupied with other
+> Projects.
+>
+> Swirl itself is currently a very mature project with a
+> [great deal](http://swirlstats.com/scn/) of
+> [course material](https://github.com/swirldev/swirl_courses#swirl-courses).
+> Swirl uses the R programming language and emphasizes statistics and data
+> science. 
+>
+> If you are primarily interested in interactive coursework and not committed
+> to Python, I'd suggest looking into swirl.
+>
+> If you are committed to Python and primarily interested in course material,
+> I'd suggest looking into [Jupyter](https://jupyter.org/) beginning with the
+> examples at [Binder](https://mybinder.readthedocs.io/en/latest/examples.html)
+> which can be used in a browser.)
+>
+> Of course you are welcome to pick up swirlypy as a developer, but I would
+> again suggest looking a Swirl or Jupyter first.
+
+As of this writing in April of 2019, Swirlypy is a proof-of-concept that
+has been left undeveloped for a handful of years. Though it and the Swirl
+project that it was inspired by have been important in my life, I can no longer
+claim to be an active maintainer of Swirlypy.
+
+For any developers who are interested in the prospect of continuing Swirlypy
+where I have left it off, I am still alive and well, and available through
+GitHub and email to answer questions and justify my design choices. The code,
+though dense in some places, is commented reasonably well, and engineered
+initially with extensibility in mind. (Perhaps it was over-engineered and
+over-designed. Only time would tell.)
+
+---
+
 ## For Developers
 
 swirlypy is a Python package, meaning that its directory must be
